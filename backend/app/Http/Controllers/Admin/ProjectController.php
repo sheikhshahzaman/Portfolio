@@ -57,6 +57,9 @@ class ProjectController extends Controller
             $validated['slug'] = Str::slug($validated['title']);
         }
 
+        // Remove image from validated data as it's handled separately
+        unset($validated['image']);
+
         $project = Project::create($validated);
 
         // Handle image upload
@@ -107,12 +110,19 @@ class ProjectController extends Controller
             'is_published' => 'boolean',
             'order' => 'nullable|integer',
             'image' => 'nullable|image|max:2048',
+            '_method' => 'nullable|string', // Allow _method field
         ]);
+
+        // Remove _method from validated data
+        unset($validated['_method']);
 
         // Generate slug if not provided
         if (empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['title']);
         }
+
+        // Remove image from validated data as it's handled separately
+        unset($validated['image']);
 
         $project->update($validated);
 

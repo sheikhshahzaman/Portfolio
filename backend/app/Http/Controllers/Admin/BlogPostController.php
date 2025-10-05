@@ -104,7 +104,11 @@ class BlogPostController extends Controller
             'is_published' => 'boolean',
             'published_at' => 'nullable|date',
             'image' => 'nullable|image|max:2048',
+            '_method' => 'nullable|string',
         ]);
+
+        // Remove _method and image from validated data
+        unset($validated['_method'], $validated['image']);
 
         // Generate slug if not provided
         if (empty($validated['slug'])) {

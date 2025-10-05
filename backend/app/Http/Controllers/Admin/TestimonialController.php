@@ -93,7 +93,11 @@ class TestimonialController extends Controller
             'is_featured' => 'boolean',
             'order' => 'nullable|integer',
             'image' => 'nullable|image|max:2048',
+            '_method' => 'nullable|string',
         ]);
+
+        // Remove _method and image from validated data
+        unset($validated['_method'], $validated['image']);
 
         $testimonial->update($validated);
 

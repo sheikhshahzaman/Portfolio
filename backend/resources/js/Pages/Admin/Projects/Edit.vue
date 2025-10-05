@@ -13,6 +13,7 @@ const props = defineProps({
 });
 
 const form = useForm({
+    _method: 'PUT',
     title: props.project.title,
     slug: props.project.slug,
     short_description: props.project.short_description,
@@ -45,7 +46,7 @@ const handleFileChange = (event) => {
 };
 
 const submit = () => {
-    form.put(route('admin.projects.update', props.project.id));
+    form.post(route('admin.projects.update', props.project.id));
 };
 </script>
 

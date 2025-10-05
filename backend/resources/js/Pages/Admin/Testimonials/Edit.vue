@@ -12,6 +12,7 @@ const props = defineProps({
 });
 
 const form = useForm({
+    _method: 'PUT',
     client_name: props.testimonial.client_name,
     client_position: props.testimonial.client_position || '',
     client_company: props.testimonial.client_company || '',
@@ -27,7 +28,7 @@ const handleFileChange = (event) => {
 };
 
 const submit = () => {
-    form.put(route('admin.testimonials.update', props.testimonial.id));
+    form.post(route('admin.testimonials.update', props.testimonial.id));
 };
 </script>
 
