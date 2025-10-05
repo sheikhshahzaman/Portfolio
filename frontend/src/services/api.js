@@ -1,0 +1,53 @@
+import axios from 'axios'
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
+
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+})
+
+export const portfolioAPI = {
+  // Get all portfolio data
+  getPortfolio() {
+    return api.get('/portfolio')
+  },
+
+  // Projects
+  getProjects() {
+    return api.get('/portfolio/projects')
+  },
+
+  getProject(slug) {
+    return api.get(`/portfolio/projects/${slug}`)
+  },
+
+  // Experiences
+  getExperiences() {
+    return api.get('/portfolio/experiences')
+  },
+
+  // Skills
+  getSkills() {
+    return api.get('/portfolio/skills')
+  },
+
+  // Blog
+  getBlogPosts(page = 1) {
+    return api.get(`/portfolio/blog?page=${page}`)
+  },
+
+  getBlogPost(slug) {
+    return api.get(`/portfolio/blog/${slug}`)
+  },
+
+  // Contact
+  sendContactMessage(data) {
+    return api.post('/contact', data)
+  }
+}
+
+export default api
