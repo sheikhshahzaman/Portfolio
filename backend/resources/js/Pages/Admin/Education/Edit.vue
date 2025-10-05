@@ -24,9 +24,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('admin.education.update', props.education.id), {
-        _method: 'put',
-    });
+    form.put(route('admin.education.update', props.education.id));
 };
 </script>
 

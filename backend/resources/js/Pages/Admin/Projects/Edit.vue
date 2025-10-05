@@ -45,9 +45,7 @@ const handleFileChange = (event) => {
 };
 
 const submit = () => {
-    form.post(route('admin.projects.update', props.project.id), {
-        _method: 'put',
-    });
+    form.put(route('admin.projects.update', props.project.id));
 };
 </script>
 

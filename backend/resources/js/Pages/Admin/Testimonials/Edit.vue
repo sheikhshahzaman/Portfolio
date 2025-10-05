@@ -27,9 +27,7 @@ const handleFileChange = (event) => {
 };
 
 const submit = () => {
-    form.post(route('admin.testimonials.update', props.testimonial.id), {
-        _method: 'put',
-    });
+    form.put(route('admin.testimonials.update', props.testimonial.id));
 };
 </script>
 
