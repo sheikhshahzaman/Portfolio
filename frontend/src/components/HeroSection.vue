@@ -1,67 +1,67 @@
 <template>
-  <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 -mt-16 pt-16">
+  <section class="relative flex items-center justify-center min-h-screen pt-16 -mt-16 overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
     <!-- Animated gradient overlay -->
     <div class="absolute inset-0 opacity-50">
       <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 animate-pulse"></div>
     </div>
 
     <!-- Content -->
-    <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
+    <div class="relative z-10 max-w-5xl px-4 mx-auto text-center">
       <!-- Greeting -->
-      <p class="text-blue-400 text-xl mb-4 animate-fade-in">
-        Hi, my name is
+      <p class="mb-4 text-xl text-blue-400 animate-fade-in">
+        {{ t('hero.greeting', 'Hi, my name is') }}
       </p>
 
       <!-- Name -->
-      <h1 class="text-5xl md:text-7xl font-bold text-white mb-4 animate-slide-up">
+      <h1 class="mb-4 text-5xl font-bold text-white md:text-7xl animate-slide-up">
         {{ profile?.name || 'Shahzaman' }}
       </h1>
 
       <!-- Title -->
-      <h2 class="text-3xl md:text-5xl font-bold text-gray-300 mb-6 animate-slide-up" style="animation-delay: 0.2s">
+      <h2 class="mb-6 text-3xl font-bold text-gray-300 md:text-5xl animate-slide-up" style="animation-delay: 0.2s">
         {{ profile?.title || 'Full-Stack Developer' }}
       </h2>
 
       <!-- Bio -->
-      <p class="text-lg md:text-xl text-gray-400 mb-8 max-w-3xl mx-auto animate-slide-up" style="animation-delay: 0.4s">
+      <p class="max-w-3xl mx-auto mb-8 text-lg text-gray-400 md:text-xl animate-slide-up" style="animation-delay: 0.4s">
         {{ profile?.bio || 'I build exceptional digital experiences that make a difference.' }}
       </p>
 
       <!-- CTA Buttons -->
-      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up" style="animation-delay: 0.6s">
+      <div class="flex flex-col items-center justify-center gap-4 sm:flex-row animate-slide-up" style="animation-delay: 0.6s">
         <a
           href="#projects"
-          class="px-8 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all hover:scale-105 transform shadow-lg hover:shadow-blue-500/50"
+          class="px-8 py-3 text-white transition-all transform bg-blue-600 rounded-full shadow-lg hover:bg-blue-700 hover:scale-105 hover:shadow-blue-500/50"
         >
-          View My Work
+          {{ t('hero.view_work', 'View My Work') }}
         </a>
         <a
           href="/resume.pdf"
           download="Shahzaman_Resume.pdf"
-          class="px-8 py-3 border-2 border-blue-600 text-blue-400 rounded-full hover:bg-blue-600 hover:text-white transition-all hover:scale-105 transform flex items-center gap-2 shadow-lg"
+          class="flex items-center gap-2 px-8 py-3 text-blue-400 transition-all transform border-2 border-blue-600 rounded-full shadow-lg hover:bg-blue-600 hover:text-white hover:scale-105"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          Download Resume
+          {{ t('hero.download_resume', 'Download Resume') }}
         </a>
         <a
           href="#contact"
-          class="px-8 py-3 border-2 border-white text-white rounded-full hover:bg-white hover:text-blue-900 transition-all hover:scale-105 transform"
+          class="px-8 py-3 text-white transition-all transform border-2 border-white rounded-full hover:bg-white hover:text-blue-900 hover:scale-105"
         >
-          Get In Touch
+          {{ t('hero.get_in_touch', 'Get In Touch') }}
         </a>
       </div>
 
       <!-- Social Links -->
-      <div class="flex gap-6 justify-center mt-12 animate-fade-in" style="animation-delay: 0.8s">
+      <div class="flex justify-center gap-6 mt-12 animate-fade-in" style="animation-delay: 0.8s">
         <!-- GitHub -->
         <a
           v-if="profile?.social_links?.github"
           :href="profile.social_links.github"
           target="_blank"
           rel="noopener noreferrer"
-          class="text-gray-400 hover:text-blue-400 transition-colors transform hover:scale-110"
+          class="text-gray-400 transition-colors transform hover:text-blue-400 hover:scale-110"
           title="GitHub"
         >
           <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -75,7 +75,7 @@
           :href="profile.social_links.linkedin"
           target="_blank"
           rel="noopener noreferrer"
-          class="text-gray-400 hover:text-blue-400 transition-colors transform hover:scale-110"
+          class="text-gray-400 transition-colors transform hover:text-blue-400 hover:scale-110"
           title="LinkedIn"
         >
           <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -89,7 +89,7 @@
           :href="profile.social_links.twitter"
           target="_blank"
           rel="noopener noreferrer"
-          class="text-gray-400 hover:text-blue-400 transition-colors transform hover:scale-110"
+          class="text-gray-400 transition-colors transform hover:text-blue-400 hover:scale-110"
           title="Twitter"
         >
           <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -99,7 +99,7 @@
       </div>
 
       <!-- Scroll indicator -->
-      <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <div class="absolute transform -translate-x-1/2 bottom-10 left-1/2 animate-bounce">
         <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
         </svg>
@@ -109,6 +109,10 @@
 </template>
 
 <script setup>
+import { useTranslations } from '../composables/useTranslations'
+
+const { t } = useTranslations()
+
 defineProps({
   profile: {
     type: Object,

@@ -17,4 +17,14 @@ class Skill extends Model
     protected $casts = [
         'proficiency' => 'integer',
     ];
+
+    public function translations()
+    {
+        return $this->hasMany(SkillTranslation::class);
+    }
+
+    public function translation($languageId)
+    {
+        return $this->translations()->where('language_id', $languageId)->first();
+    }
 }

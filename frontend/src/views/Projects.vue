@@ -16,10 +16,18 @@
         <div
           v-for="project in projects"
           :key="project.id"
-          class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2"
+          class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2 flex flex-col"
         >
-          <div class="aspect-video bg-gradient-to-br from-blue-500 to-purple-600"></div>
-          <div class="p-6">
+          <div class="aspect-video relative overflow-hidden">
+            <img
+              v-if="project.image_url"
+              :src="project.image_url"
+              :alt="project.title"
+              class="w-full h-full object-cover"
+            />
+            <div v-else class="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600"></div>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
             <div class="flex items-center justify-between mb-2">
               <h3 class="text-xl font-bold">{{ project.title }}</h3>
               <span v-if="project.is_featured" class="text-xs px-2 py-1 bg-yellow-400 text-yellow-900 rounded-full">
@@ -39,7 +47,7 @@
                 {{ tech }}
               </span>
             </div>
-            <div class="flex gap-4">
+            <div class="flex gap-4 mt-auto">
               <router-link
                 :to="`/projects/${project.slug}`"
                 class="text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium"
@@ -64,10 +72,35 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useHead } from '@unhead/vue'
 import { portfolioAPI } from '../services/api'
 
 const projects = ref([])
 const loading = ref(true)
+
+// Set meta tags for Projects page
+useHead({
+  title: 'Projects - Portfolio',
+  meta: [
+    { name: 'description', content: 'Explore my portfolio of web applications, platforms, and development projects. View live demos and source code.' },
+    { name: 'keywords', content: 'portfolio projects, web development, web applications, software projects' },
+    { name: 'robots', content: 'index, follow' },
+
+    // Open Graph
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: 'Projects - Portfolio' },
+    { property: 'og:description', content: 'Explore my portfolio of web applications, platforms, and development projects.' },
+    { property: 'og:url', content: window.location.href },
+
+    // Twitter Card
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Projects - Portfolio' },
+    { name: 'twitter:description', content: 'Explore my portfolio of web applications, platforms, and development projects.' },
+  ],
+  link: [
+    { rel: 'canonical', href: window.location.href },
+  ],
+})
 
 onMounted(async () => {
   try {

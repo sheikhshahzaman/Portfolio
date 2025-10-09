@@ -39,6 +39,66 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Dashboard
                                 </NavLink>
+                                <NavLink
+                                    :href="route('admin.projects.index')"
+                                    :active="route().current('admin.projects.*')"
+                                >
+                                    Projects
+                                </NavLink>
+                                <NavLink
+                                    :href="route('admin.blog-posts.index')"
+                                    :active="route().current('admin.blog-posts.*')"
+                                >
+                                    Blog
+                                </NavLink>
+                                <NavLink
+                                    :href="route('admin.experiences.index')"
+                                    :active="route().current('admin.experiences.*')"
+                                >
+                                    Experience
+                                </NavLink>
+                                <NavLink
+                                    :href="route('admin.skills.index')"
+                                    :active="route().current('admin.skills.*')"
+                                >
+                                    Skills
+                                </NavLink>
+                                <NavLink
+                                    :href="route('admin.education.index')"
+                                    :active="route().current('admin.education.*')"
+                                >
+                                    Education
+                                </NavLink>
+                                <NavLink
+                                    :href="route('admin.testimonials.index')"
+                                    :active="route().current('admin.testimonials.*')"
+                                >
+                                    Testimonials
+                                </NavLink>
+                                <NavLink
+                                    :href="route('admin.contact-messages.index')"
+                                    :active="route().current('admin.contact-messages.*')"
+                                >
+                                    Messages
+                                </NavLink>
+                                <NavLink
+                                    :href="route('admin.languages.index')"
+                                    :active="route().current('admin.languages.*')"
+                                >
+                                    Languages
+                                </NavLink>
+                                <NavLink
+                                    :href="route('admin.translation-keys.index')"
+                                    :active="route().current('admin.translation-keys.*')"
+                                >
+                                    Translations
+                                </NavLink>
+                                <NavLink
+                                    :href="route('admin.settings.index')"
+                                    :active="route().current('admin.settings.*')"
+                                >
+                                    Settings
+                                </NavLink>
                             </div>
                         </div>
 
@@ -145,6 +205,60 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('dashboard')"
                         >
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.projects.index')"
+                            :active="route().current('admin.projects.*')"
+                        >
+                            Projects
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.blog-posts.index')"
+                            :active="route().current('admin.blog-posts.*')"
+                        >
+                            Blog
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.experiences.index')"
+                            :active="route().current('admin.experiences.*')"
+                        >
+                            Experience
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.skills.index')"
+                            :active="route().current('admin.skills.*')"
+                        >
+                            Skills
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.education.index')"
+                            :active="route().current('admin.education.*')"
+                        >
+                            Education
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.testimonials.index')"
+                            :active="route().current('admin.testimonials.*')"
+                        >
+                            Testimonials
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.contact-messages.index')"
+                            :active="route().current('admin.contact-messages.*')"
+                        >
+                            Messages
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.languages.index')"
+                            :active="route().current('admin.languages.*')"
+                        >
+                            Languages
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.settings.index')"
+                            :active="route().current('admin.settings.*')"
+                        >
+                            Settings
                         </ResponsiveNavLink>
                     </div>
 

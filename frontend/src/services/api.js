@@ -12,8 +12,8 @@ const api = axios.create({
 
 export const portfolioAPI = {
   // Get all portfolio data
-  getPortfolio() {
-    return api.get('/portfolio')
+  getPortfolio(lang = 'en') {
+    return api.get(`/portfolio?lang=${lang}`)
   },
 
   // Projects
@@ -47,6 +47,16 @@ export const portfolioAPI = {
   // Contact
   sendContactMessage(data) {
     return api.post('/contact', data)
+  },
+
+  // Languages
+  getLanguages() {
+    return api.get('/languages')
+  },
+
+  // Translations
+  getTranslations(lang = 'en') {
+    return api.get(`/translations?lang=${lang}`)
   }
 }
 

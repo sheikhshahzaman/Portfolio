@@ -14,32 +14,32 @@
             class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             active-class="text-blue-600 dark:text-blue-400"
           >
-            Home
+            {{ t('nav.home', 'Home') }}
           </router-link>
           <a
             @click="scrollToSection('projects')"
             class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
           >
-            Projects
+            {{ t('nav.projects', 'Projects') }}
           </a>
           <a
             @click="scrollToSection('experience')"
             class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
           >
-            Experience
+            {{ t('nav.experience', 'Experience') }}
           </a>
           <a
             @click="scrollToSection('skills')"
             class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
           >
-            Skills
+            {{ t('nav.skills', 'Skills') }}
           </a>
           <router-link
             to="/blog"
             class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             active-class="text-blue-600 dark:text-blue-400"
           >
-            Blog
+            {{ t('nav.blog', 'Blog') }}
           </router-link>
           <a
             href="/resume.pdf"
@@ -49,13 +49,22 @@
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            Resume
+            {{ t('nav.resume', 'Resume') }}
           </a>
+
+          <!-- Language Switcher -->
+          <LanguageSwitcher
+            v-if="languages.length > 0"
+            :languages="languages"
+            :currentLanguage="currentLanguage"
+            @languageChanged="$emit('languageChanged', $event)"
+          />
+
           <a
             @click="scrollToSection('contact')"
             class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
           >
-            Contact
+            {{ t('nav.contact', 'Contact') }}
           </a>
         </div>
 
@@ -98,32 +107,32 @@
           @click="mobileMenuOpen = false"
           class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
         >
-          Home
+          {{ t('nav.home', 'Home') }}
         </router-link>
         <a
           @click="scrollToSection('projects'); mobileMenuOpen = false"
           class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors cursor-pointer"
         >
-          Projects
+          {{ t('nav.projects', 'Projects') }}
         </a>
         <a
           @click="scrollToSection('experience'); mobileMenuOpen = false"
           class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors cursor-pointer"
         >
-          Experience
+          {{ t('nav.experience', 'Experience') }}
         </a>
         <a
           @click="scrollToSection('skills'); mobileMenuOpen = false"
           class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors cursor-pointer"
         >
-          Skills
+          {{ t('nav.skills', 'Skills') }}
         </a>
         <router-link
           to="/blog"
           @click="mobileMenuOpen = false"
           class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
         >
-          Blog
+          {{ t('nav.blog', 'Blog') }}
         </router-link>
         <a
           href="/resume.pdf"
@@ -134,13 +143,13 @@
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          Download Resume
+          {{ t('nav.resume', 'Resume') }}
         </a>
         <a
           @click="scrollToSection('contact'); mobileMenuOpen = false"
           class="block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-center cursor-pointer"
         >
-          Contact
+          {{ t('nav.contact', 'Contact') }}
         </a>
       </div>
     </div>
@@ -150,6 +159,23 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useTranslations } from '../composables/useTranslations'
+import LanguageSwitcher from './LanguageSwitcher.vue'
+
+const { t } = useTranslations()
+
+defineProps({
+  languages: {
+    type: Array,
+    default: () => []
+  },
+  currentLanguage: {
+    type: String,
+    default: 'en'
+  }
+})
+
+defineEmits(['languageChanged'])
 
 const mobileMenuOpen = ref(false)
 const router = useRouter()

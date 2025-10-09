@@ -16,6 +16,12 @@ Route::prefix('portfolio')->group(function () {
     Route::get('/blog/{slug}', [PortfolioController::class, 'blogPost']);
 });
 
+// Languages Route
+Route::get('/languages', [PortfolioController::class, 'languages']);
+
+// Translation Keys Route
+Route::get('/translations', [PortfolioController::class, 'translations']);
+
 // Contact Route
 Route::post('/contact', [ContactController::class, 'store']);
 

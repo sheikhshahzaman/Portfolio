@@ -23,4 +23,14 @@ class Education extends Model
         'end_date' => 'date',
         'is_current' => 'boolean',
     ];
+
+    public function translations()
+    {
+        return $this->hasMany(EducationTranslation::class);
+    }
+
+    public function translation($languageId)
+    {
+        return $this->translations()->where('language_id', $languageId)->first();
+    }
 }

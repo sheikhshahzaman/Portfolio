@@ -91,6 +91,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useHead } from '@unhead/vue'
 import { portfolioAPI } from '../services/api'
 
 const form = ref({
@@ -103,6 +104,30 @@ const form = ref({
 const loading = ref(false)
 const message = ref('')
 const success = ref(false)
+
+// Set meta tags for Contact page
+useHead({
+  title: 'Contact - Portfolio',
+  meta: [
+    { name: 'description', content: 'Get in touch for project collaborations, freelance work, or just to say hello. Contact me via email or phone.' },
+    { name: 'keywords', content: 'contact, get in touch, hire developer, freelance, collaboration' },
+    { name: 'robots', content: 'index, follow' },
+
+    // Open Graph
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: 'Contact - Portfolio' },
+    { property: 'og:description', content: 'Get in touch for project collaborations, freelance work, or just to say hello.' },
+    { property: 'og:url', content: window.location.href },
+
+    // Twitter Card
+    { name: 'twitter:card', content: 'summary' },
+    { name: 'twitter:title', content: 'Contact - Portfolio' },
+    { name: 'twitter:description', content: 'Get in touch for project collaborations, freelance work, or just to say hello.' },
+  ],
+  link: [
+    { rel: 'canonical', href: window.location.href },
+  ],
+})
 
 const submitForm = async () => {
   loading.value = true

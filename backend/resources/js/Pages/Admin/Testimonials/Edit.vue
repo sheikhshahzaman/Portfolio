@@ -120,6 +120,14 @@ const submit = () => {
 
                         <div>
                             <InputLabel for="image" value="Client Photo" />
+                            <div v-if="testimonial.media && testimonial.media.length > 0" class="mb-3">
+                                <img
+                                    :src="'/storage/' + testimonial.media[0].id + '/' + testimonial.media[0].file_name"
+                                    :alt="testimonial.client_name"
+                                    class="w-24 h-24 object-cover rounded-full border border-gray-300 dark:border-gray-600"
+                                />
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Current photo</p>
+                            </div>
                             <input
                                 id="image"
                                 type="file"
@@ -134,9 +142,6 @@ const submit = () => {
                                     dark:file:bg-indigo-900 dark:file:text-indigo-300"
                             />
                             <InputError :message="form.errors.image" class="mt-2" />
-                            <p v-if="testimonial.media && testimonial.media.length > 0" class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                                Current photo uploaded
-                            </p>
                         </div>
 
                         <div>

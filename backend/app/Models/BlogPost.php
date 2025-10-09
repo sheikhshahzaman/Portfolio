@@ -21,6 +21,14 @@ class BlogPost extends Model implements HasMedia
         'is_published',
         'published_at',
         'views',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+        'og_title',
+        'og_description',
+        'twitter_card',
+        'canonical_url',
+        'robots',
     ];
 
     protected $casts = [
@@ -29,6 +37,20 @@ class BlogPost extends Model implements HasMedia
         'published_at' => 'datetime',
         'views' => 'integer',
     ];
+
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        $url = $this->getFirstMediaUrl('featured');
+
+        // If URL is relative, prepend the APP_URL
+        if ($url && !str_starts_with($url, 'http')) {
+            return config('app.url') . $url;
+        }
+
+        return $url;
+    }
 
     public function scopePublished($query)
     {

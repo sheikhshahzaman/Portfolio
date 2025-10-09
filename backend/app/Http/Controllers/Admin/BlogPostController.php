@@ -43,10 +43,24 @@ class BlogPostController extends Controller
             'excerpt' => 'required|string',
             'content' => 'required|string',
             'tags' => 'nullable|array',
+            'tags.*' => 'string',
             'is_published' => 'boolean',
             'published_at' => 'nullable|date',
             'image' => 'nullable|image|max:2048',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
+            'meta_keywords' => 'nullable|string|max:255',
+            'og_title' => 'nullable|string|max:255',
+            'og_description' => 'nullable|string|max:500',
+            'twitter_card' => 'nullable|string|in:summary,summary_large_image',
+            'canonical_url' => 'nullable|url',
+            'robots' => 'nullable|string|max:100',
         ]);
+
+        // Ensure tags is an array (handle empty case)
+        if (!isset($validated['tags']) || empty($validated['tags'])) {
+            $validated['tags'] = [];
+        }
 
         // Generate slug if not provided
         if (empty($validated['slug'])) {
@@ -57,6 +71,9 @@ class BlogPostController extends Controller
         if (!empty($validated['is_published']) && empty($validated['published_at'])) {
             $validated['published_at'] = now();
         }
+
+        // Remove image from validated data as it's handled separately
+        unset($validated['image']);
 
         $blogPost = BlogPost::create($validated);
 
@@ -101,11 +118,25 @@ class BlogPostController extends Controller
             'excerpt' => 'required|string',
             'content' => 'required|string',
             'tags' => 'nullable|array',
+            'tags.*' => 'string',
             'is_published' => 'boolean',
             'published_at' => 'nullable|date',
             'image' => 'nullable|image|max:2048',
             '_method' => 'nullable|string',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
+            'meta_keywords' => 'nullable|string|max:255',
+            'og_title' => 'nullable|string|max:255',
+            'og_description' => 'nullable|string|max:500',
+            'twitter_card' => 'nullable|string|in:summary,summary_large_image',
+            'canonical_url' => 'nullable|url',
+            'robots' => 'nullable|string|max:100',
         ]);
+
+        // Ensure tags is an array (handle empty case)
+        if (!isset($validated['tags']) || empty($validated['tags'])) {
+            $validated['tags'] = [];
+        }
 
         // Remove _method and image from validated data
         unset($validated['_method'], $validated['image']);

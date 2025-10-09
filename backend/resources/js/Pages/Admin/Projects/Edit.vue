@@ -7,9 +7,33 @@ import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Checkbox from '@/Components/Checkbox.vue';
+import SeoFields from '@/Components/SeoFields.vue';
+import TranslationFields from '@/Components/TranslationFields.vue';
+import TiptapEditor from '@/Components/TiptapEditor.vue';
 
 const props = defineProps({
     project: Object,
+    languages: {
+        type: Array,
+        default: () => []
+    },
+    translations: {
+        type: Object,
+        default: () => ({})
+    }
+});
+
+// Initialize translations for non-default languages
+const initialTranslations = {};
+props.languages.forEach(lang => {
+    if (!lang.is_default) {
+        initialTranslations[lang.code] = props.translations[lang.code] || {
+            title: '',
+            short_description: '',
+            description: '',
+            category: ''
+        };
+    }
 });
 
 const form = useForm({
@@ -26,6 +50,15 @@ const form = useForm({
     is_published: props.project.is_published,
     order: props.project.order || 0,
     image: null,
+    meta_title: props.project.meta_title || '',
+    meta_description: props.project.meta_description || '',
+    meta_keywords: props.project.meta_keywords || '',
+    og_title: props.project.og_title || '',
+    og_description: props.project.og_description || '',
+    twitter_card: props.project.twitter_card || 'summary_large_image',
+    canonical_url: props.project.canonical_url || '',
+    robots: props.project.robots || '',
+    translations: initialTranslations,
 });
 
 const techInput = ref('');
@@ -182,6 +215,14 @@ const submit = () => {
 
                         <div>
                             <InputLabel for="image" value="Project Image" />
+                            <div v-if="project.media && project.media.length > 0" class="mb-3">
+                                <img
+                                    :src="'/storage/' + project.media[0].id + '/' + project.media[0].file_name"
+                                    :alt="project.title"
+                                    class="w-48 h-32 object-cover rounded border border-gray-300 dark:border-gray-600"
+                                />
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Current image</p>
+                            </div>
                             <input
                                 id="image"
                                 type="file"
@@ -196,9 +237,6 @@ const submit = () => {
                                     dark:file:bg-indigo-900 dark:file:text-indigo-300"
                             />
                             <InputError :message="form.errors.image" class="mt-2" />
-                            <p v-if="project.media && project.media.length > 0" class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                                Current image uploaded
-                            </p>
                         </div>
 
                         <div>
@@ -223,6 +261,55 @@ const submit = () => {
                                 <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Publish</span>
                             </label>
                         </div>
+
+                        <!-- SEO Fields -->
+                        <SeoFields :form="form" :title="form.title" :description="form.short_description" />
+
+                        <!-- Translation Fields -->
+                        <TranslationFields
+                            :languages="languages"
+                            v-model="form.translations"
+                        >
+                            <template #default="{ languageCode, translations }">
+                                <div>
+                                    <InputLabel :for="`title-${languageCode}`" value="Title" />
+                                    <TextInput
+                                        :id="`title-${languageCode}`"
+                                        v-model="form.translations[languageCode].title"
+                                        type="text"
+                                        class="mt-1 block w-full"
+                                    />
+                                </div>
+
+                                <div>
+                                    <InputLabel :for="`short-desc-${languageCode}`" value="Short Description" />
+                                    <textarea
+                                        :id="`short-desc-${languageCode}`"
+                                        v-model="form.translations[languageCode].short_description"
+                                        rows="2"
+                                        class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-md shadow-sm"
+                                    ></textarea>
+                                </div>
+
+                                <div>
+                                    <InputLabel :for="`description-${languageCode}`" value="Description" />
+                                    <TiptapEditor
+                                        :id="`description-${languageCode}`"
+                                        v-model="form.translations[languageCode].description"
+                                    />
+                                </div>
+
+                                <div>
+                                    <InputLabel :for="`category-${languageCode}`" value="Category" />
+                                    <TextInput
+                                        :id="`category-${languageCode}`"
+                                        v-model="form.translations[languageCode].category"
+                                        type="text"
+                                        class="mt-1 block w-full"
+                                    />
+                                </div>
+                            </template>
+                        </TranslationFields>
 
                         <div class="flex items-center gap-4">
                             <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">

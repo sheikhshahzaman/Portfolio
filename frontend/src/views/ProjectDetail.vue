@@ -6,7 +6,15 @@
       </div>
 
       <div v-else-if="project" class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg">
-        <div class="aspect-video bg-gradient-to-br from-blue-500 to-purple-600"></div>
+        <div class="aspect-video relative overflow-hidden">
+          <img
+            v-if="project.image_url"
+            :src="project.image_url"
+            :alt="project.title"
+            class="w-full h-full object-cover"
+          />
+          <div v-else class="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600"></div>
+        </div>
 
         <div class="p-8">
           <div class="flex items-center justify-between mb-4">
@@ -73,8 +81,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useHead } from '@unhead/vue'
 import { portfolioAPI } from '../services/api'
 
 const route = useRoute()
@@ -91,4 +100,36 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+// Reactive meta tags
+const currentUrl = computed(() => window.location.href)
+
+useHead(computed(() => {
+  if (!project.value) return {}
+
+  return {
+    title: project.value.meta_title || project.value.title,
+    meta: [
+      { name: 'description', content: project.value.meta_description || project.value.short_description || '' },
+      { name: 'keywords', content: project.value.meta_keywords || project.value.technologies?.join(', ') || '' },
+      { name: 'robots', content: project.value.robots || 'index, follow' },
+
+      // Open Graph
+      { property: 'og:type', content: 'website' },
+      { property: 'og:title', content: project.value.og_title || project.value.meta_title || project.value.title },
+      { property: 'og:description', content: project.value.og_description || project.value.meta_description || project.value.short_description || '' },
+      { property: 'og:image', content: project.value.image_url || '' },
+      { property: 'og:url', content: currentUrl.value },
+
+      // Twitter Card
+      { name: 'twitter:card', content: project.value.twitter_card || 'summary_large_image' },
+      { name: 'twitter:title', content: project.value.og_title || project.value.meta_title || project.value.title },
+      { name: 'twitter:description', content: project.value.og_description || project.value.meta_description || project.value.short_description || '' },
+      { name: 'twitter:image', content: project.value.image_url || '' },
+    ],
+    link: [
+      { rel: 'canonical', href: project.value.canonical_url || currentUrl.value },
+    ],
+  }
+}))
 </script>

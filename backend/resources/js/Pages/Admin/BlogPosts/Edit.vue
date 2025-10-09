@@ -6,6 +6,8 @@ import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Checkbox from '@/Components/Checkbox.vue';
+import TiptapEditor from '@/Components/TiptapEditor.vue';
+import SeoFields from '@/Components/SeoFields.vue';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -22,6 +24,14 @@ const form = useForm({
     is_published: props.blogPost.is_published,
     published_at: props.blogPost.published_at || '',
     image: null,
+    meta_title: props.blogPost.meta_title || '',
+    meta_description: props.blogPost.meta_description || '',
+    meta_keywords: props.blogPost.meta_keywords || '',
+    og_title: props.blogPost.og_title || '',
+    og_description: props.blogPost.og_description || '',
+    twitter_card: props.blogPost.twitter_card || 'summary_large_image',
+    canonical_url: props.blogPost.canonical_url || '',
+    robots: props.blogPost.robots || '',
 });
 
 const tagInput = ref('');
@@ -103,16 +113,9 @@ const submit = () => {
 
                         <div>
                             <InputLabel for="content" value="Content *" />
-                            <textarea
-                                id="content"
-                                v-model="form.content"
-                                class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm font-mono text-sm"
-                                rows="15"
-                                required
-                                placeholder="Write your blog post content here... You can use Markdown for formatting."
-                            />
+                            <TiptapEditor v-model="form.content" class="mt-1" />
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                Supports Markdown formatting
+                                Use the toolbar to format your content
                             </p>
                             <InputError :message="form.errors.content" class="mt-2" />
                         </div>
@@ -148,6 +151,14 @@ const submit = () => {
 
                         <div>
                             <InputLabel for="image" value="Featured Image" />
+                            <div v-if="blogPost.media && blogPost.media.length > 0" class="mb-3">
+                                <img
+                                    :src="'/storage/' + blogPost.media[0].id + '/' + blogPost.media[0].file_name"
+                                    :alt="blogPost.title"
+                                    class="w-48 h-32 object-cover rounded border border-gray-300 dark:border-gray-600"
+                                />
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Current image</p>
+                            </div>
                             <input
                                 id="image"
                                 type="file"
@@ -162,9 +173,6 @@ const submit = () => {
                                     dark:file:bg-indigo-900 dark:file:text-indigo-300"
                             />
                             <InputError :message="form.errors.image" class="mt-2" />
-                            <p v-if="blogPost.media && blogPost.media.length > 0" class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                                Current image uploaded
-                            </p>
                         </div>
 
                         <div class="flex items-center gap-6">
@@ -189,6 +197,9 @@ const submit = () => {
                                 <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Published</span>
                             </label>
                         </div>
+
+                        <!-- SEO Fields -->
+                        <SeoFields :form="form" :title="form.title" :description="form.excerpt" />
 
                         <div class="flex items-center gap-4">
                             <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">

@@ -2,7 +2,7 @@
   <section id="experience" class="py-20 px-4">
     <div class="max-w-4xl mx-auto">
       <h2 class="text-4xl font-bold text-center mb-12 gradient-text">
-        Work Experience
+        {{ t('experience.title', 'Work Experience') }}
       </h2>
 
       <div class="space-y-8">
@@ -19,7 +19,7 @@
               <p class="text-xl text-blue-600 dark:text-blue-400">{{ exp.company }}</p>
             </div>
             <span class="text-gray-500 dark:text-gray-400">
-              {{ formatDate(exp.start_date) }} - {{ exp.is_current ? 'Present' : formatDate(exp.end_date) }}
+              {{ formatDate(exp.start_date) }} - {{ exp.is_current ? t('experience.present', 'Present') : formatDate(exp.end_date) }}
             </span>
           </div>
 
@@ -39,6 +39,10 @@
 </template>
 
 <script setup>
+import { useTranslations } from '../composables/useTranslations'
+
+const { t } = useTranslations()
+
 defineProps({
   experiences: {
     type: Array,

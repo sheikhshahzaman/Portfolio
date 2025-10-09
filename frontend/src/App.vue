@@ -1,10 +1,15 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import Navbar from './components/Navbar.vue'
+import { useTranslations } from './composables/useTranslations'
+import { portfolioAPI } from './services/api'
 
 const darkMode = ref(false)
+const languages = ref([])
+const currentLanguage = ref('en')
+const { loadTranslations } = useTranslations()
 
-onMounted(() => {
+onMounted(async () => {
   // Check for saved theme preference or default to system preference
   const savedTheme = localStorage.getItem('theme')
   if (savedTheme) {
@@ -13,6 +18,19 @@ onMounted(() => {
     darkMode.value = window.matchMedia('(prefers-color-scheme: dark)').matches
   }
   updateTheme()
+
+  // Load languages
+  try {
+    const response = await portfolioAPI.getLanguages()
+    languages.value = response.data
+  } catch (error) {
+    console.error('Error loading languages:', error)
+  }
+
+  // Load translations
+  const savedLanguage = localStorage.getItem('selectedLanguage') || 'en'
+  currentLanguage.value = savedLanguage
+  await loadTranslations(savedLanguage)
 })
 
 const toggleDarkMode = () => {
@@ -29,12 +47,23 @@ const updateTheme = () => {
     localStorage.setItem('theme', 'light')
   }
 }
+
+const handleLanguageChange = async (langCode) => {
+  currentLanguage.value = langCode
+  await loadTranslations(langCode)
+  // Emit event to notify components about language change
+  window.dispatchEvent(new CustomEvent('languageChanged', { detail: { language: langCode } }))
+}
 </script>
 
 <template>
   <div class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
     <!-- Navigation -->
-    <Navbar />
+    <Navbar
+      :languages="languages"
+      :currentLanguage="currentLanguage"
+      @languageChanged="handleLanguageChange"
+    />
 
     <!-- Dark Mode Toggle Button -->
     <button

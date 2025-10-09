@@ -30,4 +30,14 @@ class Experience extends Model implements HasMedia
         'is_current' => 'boolean',
         'achievements' => 'array',
     ];
+
+    public function translations()
+    {
+        return $this->hasMany(ExperienceTranslation::class);
+    }
+
+    public function translation($languageId)
+    {
+        return $this->translations()->where('language_id', $languageId)->first();
+    }
 }

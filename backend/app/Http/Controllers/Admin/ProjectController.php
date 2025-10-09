@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -29,7 +30,11 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/Projects/Create');
+        $languages = Language::where('is_active', true)->orderBy('order')->get();
+
+        return Inertia::render('Admin/Projects/Create', [
+            'languages' => $languages,
+        ]);
     }
 
     /**
@@ -50,6 +55,15 @@ class ProjectController extends Controller
             'is_published' => 'boolean',
             'order' => 'nullable|integer',
             'image' => 'nullable|image|max:2048',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
+            'meta_keywords' => 'nullable|string|max:255',
+            'og_title' => 'nullable|string|max:255',
+            'og_description' => 'nullable|string|max:500',
+            'twitter_card' => 'nullable|string|in:summary,summary_large_image',
+            'canonical_url' => 'nullable|url',
+            'robots' => 'nullable|string|max:100',
+            'translations' => 'nullable|array',
         ]);
 
         // Generate slug if not provided
@@ -57,8 +71,10 @@ class ProjectController extends Controller
             $validated['slug'] = Str::slug($validated['title']);
         }
 
-        // Remove image from validated data as it's handled separately
+        // Remove fields handled separately
+        $translations = $validated['translations'] ?? [];
         unset($validated['image']);
+        unset($validated['translations']);
 
         $project = Project::create($validated);
 
@@ -67,6 +83,9 @@ class ProjectController extends Controller
             $project->addMediaFromRequest('image')
                 ->toMediaCollection('featured');
         }
+
+        // Save translations
+        $this->saveTranslations($project, $translations);
 
         return redirect()->route('admin.projects.index')
             ->with('success', 'Project created successfully.');
@@ -87,8 +106,21 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        $languages = Language::where('is_active', true)->orderBy('order')->get();
+
+        // Load translations
+        $translations = [];
+        foreach ($languages as $lang) {
+            if (!$lang->is_default) {
+                $translation = $project->translation($lang->id);
+                $translations[$lang->code] = $translation ? $translation->toArray() : null;
+            }
+        }
+
         return Inertia::render('Admin/Projects/Edit', [
             'project' => $project->load('media'),
+            'languages' => $languages,
+            'translations' => $translations,
         ]);
     }
 
@@ -111,18 +143,27 @@ class ProjectController extends Controller
             'order' => 'nullable|integer',
             'image' => 'nullable|image|max:2048',
             '_method' => 'nullable|string', // Allow _method field
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
+            'meta_keywords' => 'nullable|string|max:255',
+            'og_title' => 'nullable|string|max:255',
+            'og_description' => 'nullable|string|max:500',
+            'twitter_card' => 'nullable|string|in:summary,summary_large_image',
+            'canonical_url' => 'nullable|url',
+            'robots' => 'nullable|string|max:100',
+            'translations' => 'nullable|array',
         ]);
 
-        // Remove _method from validated data
+        // Remove fields handled separately
+        $translations = $validated['translations'] ?? [];
         unset($validated['_method']);
+        unset($validated['image']);
+        unset($validated['translations']);
 
         // Generate slug if not provided
         if (empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['title']);
         }
-
-        // Remove image from validated data as it's handled separately
-        unset($validated['image']);
 
         $project->update($validated);
 
@@ -132,6 +173,9 @@ class ProjectController extends Controller
             $project->addMediaFromRequest('image')
                 ->toMediaCollection('featured');
         }
+
+        // Save translations
+        $this->saveTranslations($project, $translations);
 
         return redirect()->route('admin.projects.index')
             ->with('success', 'Project updated successfully.');
@@ -146,5 +190,32 @@ class ProjectController extends Controller
 
         return redirect()->route('admin.projects.index')
             ->with('success', 'Project deleted successfully.');
+    }
+
+    /**
+     * Save translations for the project
+     */
+    private function saveTranslations(Project $project, array $translations)
+    {
+        foreach ($translations as $langCode => $data) {
+            if (empty($data)) {
+                continue;
+            }
+
+            $language = Language::where('code', $langCode)->first();
+            if (!$language) {
+                continue;
+            }
+
+            $project->translations()->updateOrCreate(
+                ['language_id' => $language->id],
+                [
+                    'title' => $data['title'] ?? null,
+                    'short_description' => $data['short_description'] ?? null,
+                    'description' => $data['description'] ?? null,
+                    'category' => $data['category'] ?? null,
+                ]
+            );
+        }
     }
 }

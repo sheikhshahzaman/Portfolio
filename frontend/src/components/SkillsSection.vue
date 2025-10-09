@@ -2,7 +2,7 @@
   <section id="skills" class="py-20 px-4 bg-gray-50 dark:bg-gray-800">
     <div class="max-w-6xl mx-auto">
       <h2 class="text-4xl font-bold text-center mb-12 gradient-text">
-        Skills & Expertise
+        {{ t('skills.title', 'Skills & Expertise') }}
       </h2>
 
       <div class="space-y-8">
@@ -29,6 +29,10 @@
 </template>
 
 <script setup>
+import { useTranslations } from '../composables/useTranslations'
+
+const { t } = useTranslations()
+
 defineProps({
   skills: {
     type: Object,
