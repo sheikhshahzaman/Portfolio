@@ -48,12 +48,12 @@
               </span>
             </div>
             <div class="flex gap-4 mt-auto">
-              <router-link
-                :to="`/projects/${project.slug}`"
+              <button
+                @click="openModal(project)"
                 class="text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium"
               >
                 View Details →
-              </router-link>
+              </button>
               <a
                 v-if="project.demo_url"
                 :href="project.demo_url"
@@ -67,6 +67,108 @@
         </div>
       </div>
     </div>
+
+    <!-- Project Detail Modal -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div
+          v-if="showModal"
+          class="fixed inset-0 z-50 overflow-y-auto"
+          @click.self="closeModal"
+        >
+          <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <!-- Background overlay -->
+            <div
+              class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity"
+              @click="closeModal"
+            ></div>
+
+            <!-- Modal panel -->
+            <div class="relative inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-2xl rounded-2xl">
+              <!-- Close button -->
+              <button
+                @click="closeModal"
+                class="absolute top-4 right-4 z-10 p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              >
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
+              <div v-if="selectedProject" class="max-h-[90vh] overflow-y-auto">
+                <!-- Project Image -->
+                <div class="aspect-video relative overflow-hidden">
+                  <img
+                    v-if="selectedProject.image_url"
+                    :src="selectedProject.image_url"
+                    :alt="selectedProject.title"
+                    class="w-full h-full object-cover"
+                  />
+                  <div v-else class="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600"></div>
+                </div>
+
+                <!-- Project Details -->
+                <div class="p-8">
+                  <!-- Title and Category -->
+                  <div class="flex items-start justify-between mb-4">
+                    <div>
+                      <h2 class="text-3xl font-bold mb-2">{{ selectedProject.title }}</h2>
+                      <p class="text-lg text-blue-600 dark:text-blue-400">{{ selectedProject.category }}</p>
+                    </div>
+                    <span
+                      v-if="selectedProject.is_featured"
+                      class="px-3 py-1 bg-yellow-400 text-yellow-900 rounded-full text-sm font-medium"
+                    >
+                      Featured
+                    </span>
+                  </div>
+
+                  <!-- Description -->
+                  <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-3">Description</h3>
+                    <div class="text-gray-600 dark:text-gray-400 leading-relaxed" v-html="selectedProject.description"></div>
+                  </div>
+
+                  <!-- Technologies -->
+                  <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-3">Technologies Used</h3>
+                    <div class="flex flex-wrap gap-2">
+                      <span
+                        v-for="tech in selectedProject.technologies"
+                        :key="tech"
+                        class="px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full text-sm font-medium"
+                      >
+                        {{ tech }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Links -->
+                  <div class="flex gap-4">
+                    <a
+                      v-if="selectedProject.demo_url"
+                      :href="selectedProject.demo_url"
+                      target="_blank"
+                      class="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-center transition-colors"
+                    >
+                      View Live Demo →
+                    </a>
+                    <a
+                      v-if="selectedProject.github_url"
+                      :href="selectedProject.github_url"
+                      target="_blank"
+                      class="flex-1 px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg font-medium text-center transition-colors"
+                    >
+                      View Source Code →
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -77,6 +179,20 @@ import { portfolioAPI } from '../services/api'
 
 const projects = ref([])
 const loading = ref(true)
+const showModal = ref(false)
+const selectedProject = ref(null)
+
+const openModal = (project) => {
+  selectedProject.value = project
+  showModal.value = true
+  document.body.style.overflow = 'hidden'
+}
+
+const closeModal = () => {
+  showModal.value = false
+  selectedProject.value = null
+  document.body.style.overflow = ''
+}
 
 // Set meta tags for Projects page
 useHead({
@@ -113,3 +229,25 @@ onMounted(async () => {
   }
 })
 </script>
+
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-enter-active .inline-block,
+.modal-leave-active .inline-block {
+  transition: transform 0.3s ease;
+}
+
+.modal-enter-from .inline-block,
+.modal-leave-to .inline-block {
+  transform: scale(0.95);
+}
+</style>

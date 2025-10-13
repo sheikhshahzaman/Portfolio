@@ -16,12 +16,13 @@
           >
             {{ t('nav.home', 'Home') }}
           </router-link>
-          <a
-            @click="scrollToSection('projects')"
-            class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+          <router-link
+            to="/projects"
+            class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            active-class="text-blue-600 dark:text-blue-400"
           >
             {{ t('nav.projects', 'Projects') }}
-          </a>
+          </router-link>
           <a
             @click="scrollToSection('experience')"
             class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
@@ -109,12 +110,13 @@
         >
           {{ t('nav.home', 'Home') }}
         </router-link>
-        <a
-          @click="scrollToSection('projects'); mobileMenuOpen = false"
-          class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors cursor-pointer"
+        <router-link
+          to="/projects"
+          @click="mobileMenuOpen = false"
+          class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
         >
           {{ t('nav.projects', 'Projects') }}
-        </a>
+        </router-link>
         <a
           @click="scrollToSection('experience'); mobileMenuOpen = false"
           class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors cursor-pointer"

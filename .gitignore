@@ -27,6 +27,13 @@ backend/auth.json
 backend/public/hot
 backend/public/build
 backend/public/storage
+# Frontend build artifacts (copied from frontend/dist during deployment)
+backend/public/index.html
+backend/public/assets/
+backend/public/*.svg
+backend/public/*.webmanifest
+backend/public/vite.svg
+backend/public/resume.pdf
 
 # Frontend (Vue)
 frontend/node_modules/
