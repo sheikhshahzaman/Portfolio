@@ -4,7 +4,11 @@ import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
-import { watch } from 'vue'
+import Image from '@tiptap/extension-image'
+import TextStyle from '@tiptap/extension-text-style'
+import Color from '@tiptap/extension-color'
+import Highlight from '@tiptap/extension-highlight'
+import { watch, ref } from 'vue'
 
 const props = defineProps({
     modelValue: {
@@ -14,6 +18,9 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
+
+const showHtmlEditor = ref(false)
+const htmlContent = ref('')
 
 const editor = useEditor({
     content: props.modelValue,
@@ -25,6 +32,15 @@ const editor = useEditor({
         Underline,
         TextAlign.configure({
             types: ['heading', 'paragraph'],
+        }),
+        Image.configure({
+            inline: true,
+            allowBase64: true,
+        }),
+        TextStyle,
+        Color,
+        Highlight.configure({
+            multicolor: true,
         }),
     ],
     onUpdate: ({ editor }) => {
@@ -38,6 +54,44 @@ watch(() => props.modelValue, (value) => {
         editor.value.commands.setContent(value, false)
     }
 })
+
+const addImage = () => {
+    const url = prompt('Enter image URL:')
+    if (url) {
+        editor.value.chain().focus().setImage({ src: url }).run()
+    }
+}
+
+const addLink = () => {
+    const url = prompt('Enter URL:')
+    if (url) {
+        editor.value.chain().focus().setLink({ href: url }).run()
+    }
+}
+
+const toggleHtmlEditor = () => {
+    if (!showHtmlEditor.value) {
+        htmlContent.value = editor.value.getHTML()
+    } else {
+        editor.value.commands.setContent(htmlContent.value, false)
+        emit('update:modelValue', htmlContent.value)
+    }
+    showHtmlEditor.value = !showHtmlEditor.value
+}
+
+const setColor = () => {
+    const color = prompt('Enter color (e.g., #ff0000, red):')
+    if (color) {
+        editor.value.chain().focus().setColor(color).run()
+    }
+}
+
+const setHighlight = () => {
+    const color = prompt('Enter highlight color (e.g., #ffff00, yellow):')
+    if (color) {
+        editor.value.chain().focus().setHighlight({ color }).run()
+    }
+}
 </script>
 
 <template>
@@ -176,6 +230,46 @@ watch(() => props.modelValue, (value) => {
 
             <div class="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"></div>
 
+            <!-- Link & Image -->
+            <button
+                type="button"
+                @click="addLink"
+                class="px-3 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-sm"
+                title="Add Link"
+            >
+                🔗
+            </button>
+            <button
+                type="button"
+                @click="addImage"
+                class="px-3 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-sm"
+                title="Add Image"
+            >
+                🖼️
+            </button>
+
+            <div class="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+
+            <!-- Color & Highlight -->
+            <button
+                type="button"
+                @click="setColor"
+                class="px-3 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-sm"
+                title="Text Color"
+            >
+                🎨
+            </button>
+            <button
+                type="button"
+                @click="setHighlight"
+                class="px-3 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-sm"
+                title="Highlight"
+            >
+                ✨
+            </button>
+
+            <div class="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+
             <!-- Undo/Redo -->
             <button
                 type="button"
@@ -193,10 +287,39 @@ watch(() => props.modelValue, (value) => {
             >
                 ↷
             </button>
+
+            <div class="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+
+            <!-- HTML Editor Toggle -->
+            <button
+                type="button"
+                @click="toggleHtmlEditor"
+                :class="{ 'bg-blue-300 dark:bg-blue-600': showHtmlEditor }"
+                class="px-3 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-sm font-mono"
+                title="Edit HTML"
+            >
+                &lt;HTML&gt;
+            </button>
+        </div>
+
+        <!-- HTML Editor -->
+        <div v-if="showHtmlEditor" class="p-4 border-b border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                Edit HTML (Paste your HTML here):
+            </label>
+            <textarea
+                v-model="htmlContent"
+                class="w-full h-64 p-3 font-mono text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="<p>Paste your HTML here...</p>"
+            />
+            <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                Click the &lt;HTML&gt; button again to apply changes and return to visual editor
+            </p>
         </div>
 
         <!-- Editor Content -->
         <EditorContent
+            v-show="!showHtmlEditor"
             :editor="editor"
             class="prose dark:prose-invert max-w-none p-4 min-h-[300px] focus:outline-none dark:bg-gray-900 dark:text-gray-300"
         />
@@ -287,5 +410,24 @@ watch(() => props.modelValue, (value) => {
 
 .dark .tiptap a {
     color: #60a5fa;
+}
+
+.tiptap img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1em 0;
+    border-radius: 0.5em;
+}
+
+.tiptap mark {
+    background-color: #fef08a;
+    padding: 0.1em 0.2em;
+    border-radius: 0.25em;
+}
+
+.dark .tiptap mark {
+    background-color: #854d0e;
+    color: #fef3c7;
 }
 </style>
