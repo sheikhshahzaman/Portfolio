@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import Navbar from './components/Navbar.vue'
+import Footer from './components/Footer.vue'
 import { useTranslations } from './composables/useTranslations'
 import { portfolioAPI } from './services/api'
 
@@ -91,5 +92,8 @@ const handleLanguageChange = async (langCode) => {
 
     <!-- Router View -->
     <router-view />
+
+    <!-- Footer -->
+    <Footer />
   </div>
 </template>
