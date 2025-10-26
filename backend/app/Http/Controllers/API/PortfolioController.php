@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Experience;
 use App\Models\Skill;
+use App\Models\Service;
 use App\Models\Education;
 use App\Models\Testimonial;
 use App\Models\BlogPost;
@@ -135,6 +136,11 @@ class PortfolioController extends Controller
     public function skills()
     {
         return response()->json(Skill::orderBy('order')->get()->groupBy('category'));
+    }
+
+    public function services()
+    {
+        return response()->json(Service::active()->orderBy('order')->get());
     }
 
     public function blog()

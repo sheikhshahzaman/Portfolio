@@ -12,6 +12,7 @@ Route::prefix('portfolio')->group(function () {
     Route::get('/projects/{slug}', [PortfolioController::class, 'project']);
     Route::get('/experiences', [PortfolioController::class, 'experiences']);
     Route::get('/skills', [PortfolioController::class, 'skills']);
+    Route::get('/services', [PortfolioController::class, 'services']);
     Route::get('/blog', [PortfolioController::class, 'blog']);
     Route::get('/blog/{slug}', [PortfolioController::class, 'blogPost']);
 });

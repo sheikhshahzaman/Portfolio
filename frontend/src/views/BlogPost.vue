@@ -214,9 +214,14 @@ const readingTime = computed(() => {
 
 // Generate table of contents from headings
 const generateTableOfContents = () => {
-  if (!contentRef.value) return
+  if (!contentRef.value) {
+    console.log('contentRef is null')
+    return
+  }
 
   const headings = contentRef.value.querySelectorAll('h2, h3')
+  console.log('Found headings:', headings.length)
+
   tableOfContents.value = Array.from(headings).map((heading, index) => {
     const id = `heading-${index}`
     heading.id = id
@@ -226,6 +231,8 @@ const generateTableOfContents = () => {
       level: heading.tagName.toLowerCase()
     }
   })
+
+  console.log('Table of contents:', tableOfContents.value)
 }
 
 // Scroll to heading
@@ -278,8 +285,16 @@ onMounted(async () => {
     const response = await portfolioAPI.getBlogPost(route.params.slug)
     post.value = response.data
 
+    // Wait for DOM to update, then generate TOC with multiple retries
     await nextTick()
+
+    // Try immediately
     generateTableOfContents()
+
+    // Retry after small delays to ensure content is rendered
+    setTimeout(generateTableOfContents, 100)
+    setTimeout(generateTableOfContents, 300)
+    setTimeout(generateTableOfContents, 500)
 
     window.addEventListener('scroll', handleScroll)
   } catch (error) {

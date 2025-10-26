@@ -64,6 +64,12 @@ const showingNavigationDropdown = ref(false);
                                     Skills
                                 </NavLink>
                                 <NavLink
+                                    :href="route('admin.services.index')"
+                                    :active="route().current('admin.services.*')"
+                                >
+                                    Services
+                                </NavLink>
+                                <NavLink
                                     :href="route('admin.education.index')"
                                     :active="route().current('admin.education.*')"
                                 >
@@ -229,6 +235,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('admin.skills.*')"
                         >
                             Skills
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('admin.services.index')"
+                            :active="route().current('admin.services.*')"
+                        >
+                            Services
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             :href="route('admin.education.index')"

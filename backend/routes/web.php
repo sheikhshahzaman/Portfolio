@@ -43,6 +43,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('education', EducationController::class);
     Route::resource('testimonials', TestimonialController::class);
     Route::resource('blog-posts', BlogPostController::class);
+    Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class);
 
     // Contact Messages
     Route::get('contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');

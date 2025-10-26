@@ -35,6 +35,11 @@ export const portfolioAPI = {
     return api.get('/portfolio/skills')
   },
 
+  // Services
+  getServices() {
+    return api.get('/portfolio/services')
+  },
+
   // Blog
   getBlogPosts(page = 1) {
     return api.get(`/portfolio/blog?page=${page}`)
