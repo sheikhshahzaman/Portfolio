@@ -17,9 +17,6 @@
 
     <!-- Testimonials Section -->
     <TestimonialsSection :testimonials="portfolioData?.testimonials" />
-
-    <!-- Contact Section -->
-    <ContactSection />
   </div>
 </template>
 
@@ -34,8 +31,6 @@ import ExperienceSection from '../components/ExperienceSection.vue'
 import EducationSection from '../components/EducationSection.vue'
 import SkillsSection from '../components/SkillsSection.vue'
 import TestimonialsSection from '../components/TestimonialsSection.vue'
-import ContactSection from '../components/ContactSection.vue'
-import LanguageSwitcher from '../components/LanguageSwitcher.vue'
 
 const portfolioData = ref(null)
 const loading = ref(true)
