@@ -9,6 +9,9 @@
     <!-- Experience Section -->
     <ExperienceSection :experiences="portfolioData?.experiences" />
 
+    <!-- Education Section -->
+    <EducationSection :education="portfolioData?.education" />
+
     <!-- Skills Section -->
     <SkillsSection :skills="portfolioData?.skills" />
 
@@ -28,6 +31,7 @@ import { useTranslations } from '../composables/useTranslations'
 import HeroSection from '../components/HeroSection.vue'
 import ProjectsSection from '../components/ProjectsSection.vue'
 import ExperienceSection from '../components/ExperienceSection.vue'
+import EducationSection from '../components/EducationSection.vue'
 import SkillsSection from '../components/SkillsSection.vue'
 import TestimonialsSection from '../components/TestimonialsSection.vue'
 import ContactSection from '../components/ContactSection.vue'

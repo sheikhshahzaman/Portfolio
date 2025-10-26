@@ -30,7 +30,17 @@
             {{ post.excerpt }}
           </p>
 
-          <div class="prose dark:prose-invert max-w-none mb-8">
+          <div class="prose prose-lg dark:prose-invert max-w-none mb-8
+                      prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-gray-100
+                      prose-p:text-gray-700 dark:prose-p:text-gray-300
+                      prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+                      prose-strong:text-gray-900 dark:prose-strong:text-gray-100
+                      prose-code:text-pink-600 dark:prose-code:text-pink-400 prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
+                      prose-pre:bg-gray-900 dark:prose-pre:bg-gray-950 prose-pre:text-gray-100
+                      prose-blockquote:border-l-blue-600 prose-blockquote:border-l-4 prose-blockquote:pl-4 prose-blockquote:italic
+                      prose-img:rounded-lg prose-img:shadow-lg
+                      prose-ul:list-disc prose-ol:list-decimal
+                      ">
             <div v-html="formatContent(post.content)"></div>
           </div>
 
