@@ -12,7 +12,7 @@
         <div
           v-for="(edu, index) in education"
           :key="edu.id"
-          class="scroll-animate group border-l-4 border-green-600 hover:border-emerald-600 pl-6 pb-8 relative transition-all duration-300 hover:pl-8"
+          class="scroll-animate group border-l-4 border-green-600 hover:border-emerald-600 pl-6 pb-8 relative transition-all duration-300"
           :style="{ animationDelay: (index * 0.15 + 0.2) + 's' }"
         >
           <div class="absolute -left-2 top-0 w-4 h-4 bg-green-600 rounded-full group-hover:scale-150 group-hover:bg-emerald-600 transition-all duration-300 shadow-lg"></div>

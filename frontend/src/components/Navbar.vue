@@ -68,12 +68,13 @@
             @languageChanged="$emit('languageChanged', $event)"
           />
 
-          <a
-            @click="scrollToSection('contact')"
-            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
+          <router-link
+            to="/contact"
+            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            active-class="bg-blue-800"
           >
             {{ t('nav.contact', 'Contact') }}
-          </a>
+          </router-link>
         </div>
 
         <!-- Mobile Menu Button -->
@@ -161,12 +162,13 @@
           </svg>
           {{ t('nav.resume', 'Resume') }}
         </a>
-        <a
-          @click="scrollToSection('contact'); mobileMenuOpen = false"
-          class="block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-center cursor-pointer"
+        <router-link
+          to="/contact"
+          @click="mobileMenuOpen = false"
+          class="block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-center"
         >
           {{ t('nav.contact', 'Contact') }}
-        </a>
+        </router-link>
       </div>
     </div>
   </nav>

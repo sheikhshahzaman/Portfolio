@@ -40,11 +40,14 @@ const { loadTranslations } = useTranslations()
 const loadPortfolioData = async (lang = 'en') => {
   try {
     loading.value = true
+    console.log('🚀 Loading portfolio data for language:', lang)
     const response = await portfolioAPI.getPortfolio(lang)
+    console.log('✅ Portfolio data loaded successfully:', response.data)
     portfolioData.value = response.data
     currentLanguage.value = response.data.current_language || lang
   } catch (error) {
-    console.error('Error loading portfolio data:', error)
+    console.error('❌ Error loading portfolio data:', error)
+    console.error('Error details:', error.response?.data || error.message)
   } finally {
     loading.value = false
   }

@@ -12,7 +12,7 @@
         <div
           v-for="(exp, index) in experiences"
           :key="exp.id"
-          class="scroll-animate group border-l-4 border-blue-600 hover:border-purple-600 pl-6 pb-8 relative transition-all duration-300 hover:pl-8"
+          class="scroll-animate group border-l-4 border-blue-600 hover:border-purple-600 pl-6 pb-8 relative transition-all duration-300"
           :style="{ animationDelay: (index * 0.15 + 0.2) + 's' }"
         >
           <div class="absolute -left-2 top-0 w-4 h-4 bg-blue-600 rounded-full group-hover:scale-150 group-hover:bg-purple-600 transition-all duration-300 shadow-lg"></div>
