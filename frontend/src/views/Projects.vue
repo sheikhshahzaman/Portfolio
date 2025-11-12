@@ -126,7 +126,7 @@
                   <!-- Description -->
                   <div class="mb-6">
                     <h3 class="text-xl font-semibold mb-3">Description</h3>
-                    <div class="text-gray-600 dark:text-gray-400 leading-relaxed" v-html="selectedProject.description"></div>
+                    <div class="text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-line">{{ selectedProject.description }}</div>
                   </div>
 
                   <!-- Technologies -->
