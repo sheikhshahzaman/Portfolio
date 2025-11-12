@@ -36,9 +36,9 @@
             </span>
           </div>
 
-          <p class="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+          <div class="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed bg-gray-50 dark:bg-gray-800 p-4 rounded-lg whitespace-pre-line">
             {{ exp.description }}
-          </p>
+          </div>
 
           <ul v-if="exp.achievements" class="space-y-2">
             <li v-for="(achievement, index) in exp.achievements" :key="index" class="flex items-start gap-2 text-gray-600 dark:text-gray-400">

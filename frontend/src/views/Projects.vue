@@ -35,7 +35,7 @@
               </span>
             </div>
             <p class="text-sm text-blue-600 dark:text-blue-400 mb-2">{{ project.category }}</p>
-            <p class="text-gray-600 dark:text-gray-400 mb-4">
+            <p class="text-gray-600 dark:text-gray-400 mb-4 whitespace-pre-line">
               {{ project.short_description }}
             </p>
             <div class="flex flex-wrap gap-2 mb-4">

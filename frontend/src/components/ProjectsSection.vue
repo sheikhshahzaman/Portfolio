@@ -31,7 +31,7 @@
           </div>
           <div class="p-6 flex flex-col flex-1">
             <h3 class="text-xl font-bold mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{{ project.title }}</h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+            <p class="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2 whitespace-pre-line">
               {{ project.short_description }}
             </p>
             <div class="flex flex-wrap gap-2 mb-4">

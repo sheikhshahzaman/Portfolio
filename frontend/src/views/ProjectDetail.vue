@@ -27,7 +27,7 @@
           <p class="text-xl text-blue-600 dark:text-blue-400 mb-6">{{ project.category }}</p>
 
           <div class="prose dark:prose-invert max-w-none mb-8">
-            <p class="text-lg text-gray-700 dark:text-gray-300">{{ project.description }}</p>
+            <div class="text-lg text-gray-700 dark:text-gray-300 whitespace-pre-line leading-relaxed">{{ project.description }}</div>
           </div>
 
           <div class="mb-8">
