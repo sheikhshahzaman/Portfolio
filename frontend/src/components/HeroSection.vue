@@ -1,5 +1,5 @@
 <template>
-  <section class="relative flex items-center justify-center min-h-screen pt-16 -mt-16 overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
+  <section class="relative flex items-center justify-center min-h-screen pt-48 pb-32 -mt-16 overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
     <!-- Animated gradient overlay -->
     <div class="absolute inset-0 opacity-50">
       <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 animate-pulse"></div>
