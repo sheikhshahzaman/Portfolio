@@ -23,7 +23,7 @@
       </h2>
 
       <!-- Bio -->
-      <p class="max-w-3xl mx-auto mb-8 text-lg text-gray-400 md:text-xl animate-slide-up" style="animation-delay: 0.4s">
+      <p class="max-w-3xl mx-auto mb-8 text-lg text-gray-400 md:text-xl animate-slide-up whitespace-pre-line min-h-[120px]" style="animation-delay: 0.4s">
         {{ profile?.bio || 'I build exceptional digital experiences that make a difference.' }}
       </p>
 
