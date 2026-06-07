@@ -66,6 +66,9 @@ class PortfolioController extends Controller
                 'canonical_url' => Setting::get('canonical_url'),
                 'robots' => Setting::get('robots'),
             ],
+            'about' => [
+                'principles' => json_decode(Setting::get('about_principles', '[]'), true) ?: [],
+            ],
             'projects' => $projects,
             'experiences' => $experiences,
             'skills' => $skills->groupBy('category'),
@@ -115,6 +118,23 @@ class PortfolioController extends Controller
             unset($item->translations);
             return $item;
         });
+    }
+
+    public function theme()
+    {
+        return response()->json([
+            'palette'      => Setting::get('theme_palette', 'Sunset'),
+            'amber'        => Setting::get('theme_amber'),
+            'orange'       => Setting::get('theme_orange'),
+            'coral'        => Setting::get('theme_coral'),
+            'violet'       => Setting::get('theme_violet'),
+            'accent'       => Setting::get('theme_accent'),
+            'accent_deep'  => Setting::get('theme_accent_deep'),
+            'ink'          => Setting::get('theme_ink'),
+            'bg'           => Setting::get('theme_bg'),
+            'card'         => Setting::get('theme_card'),
+            'logo_color'   => Setting::get('logo_color'),
+        ]);
     }
 
     public function projects()

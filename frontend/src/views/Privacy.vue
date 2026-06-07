@@ -1,112 +1,43 @@
-<template>
-  <div class="min-h-screen py-20 px-4 pt-24">
-    <div class="max-w-4xl mx-auto">
-      <h1 class="text-4xl font-bold mb-8 gradient-text">Privacy Policy</h1>
-
-      <div class="prose dark:prose-invert max-w-none">
-        <p class="text-lg mb-6">Last updated: {{ new Date().toLocaleDateString() }}</p>
-
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">1. Information We Collect</h2>
-          <p class="mb-4">
-            When you visit our website or contact us, we may collect the following information:
-          </p>
-          <ul class="list-disc pl-6 mb-4 space-y-2">
-            <li>Name and contact information (email address, phone number)</li>
-            <li>Messages you send through our contact form</li>
-            <li>Usage data and analytics (IP address, browser type, pages visited)</li>
-            <li>Cookies and similar tracking technologies</li>
-          </ul>
-        </section>
-
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">2. How We Use Your Information</h2>
-          <p class="mb-4">
-            We use the information we collect for the following purposes:
-          </p>
-          <ul class="list-disc pl-6 mb-4 space-y-2">
-            <li>To respond to your inquiries and provide customer support</li>
-            <li>To improve our website and services</li>
-            <li>To send periodic emails regarding your inquiry or other products and services</li>
-            <li>To analyze website usage and optimize user experience</li>
-          </ul>
-        </section>
-
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">3. Information Sharing</h2>
-          <p class="mb-4">
-            We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except:
-          </p>
-          <ul class="list-disc pl-6 mb-4 space-y-2">
-            <li>When required by law or to comply with legal processes</li>
-            <li>To trusted service providers who assist us in operating our website</li>
-            <li>To protect our rights, property, or safety</li>
-          </ul>
-        </section>
-
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">4. Cookies</h2>
-          <p class="mb-4">
-            Our website uses cookies to enhance user experience. Cookies are small files that a site or its service provider transfers to your computer's hard drive through your web browser (if you allow) that enables the site's systems to recognize your browser and capture and remember certain information.
-          </p>
-          <p class="mb-4">
-            You can choose to disable cookies through your browser settings. However, this may affect your ability to use certain features of our website.
-          </p>
-        </section>
-
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">5. Data Security</h2>
-          <p class="mb-4">
-            We implement appropriate security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet or electronic storage is 100% secure.
-          </p>
-        </section>
-
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">6. Your Rights</h2>
-          <p class="mb-4">
-            You have the right to:
-          </p>
-          <ul class="list-disc pl-6 mb-4 space-y-2">
-            <li>Access the personal information we hold about you</li>
-            <li>Request correction of inaccurate information</li>
-            <li>Request deletion of your personal information</li>
-            <li>Opt-out of receiving marketing communications</li>
-          </ul>
-        </section>
-
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">7. Third-Party Links</h2>
-          <p class="mb-4">
-            Our website may contain links to third-party websites. We are not responsible for the privacy practices or content of these external sites. We encourage you to review their privacy policies.
-          </p>
-        </section>
-
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">8. Changes to This Policy</h2>
-          <p class="mb-4">
-            We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision date.
-          </p>
-        </section>
-
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">9. Contact Us</h2>
-          <p class="mb-4">
-            If you have any questions about this Privacy Policy, please contact us through our
-            <router-link to="/contact" class="text-blue-600 dark:text-blue-400 hover:underline">contact page</router-link>.
-          </p>
-        </section>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
+import { ref, computed } from 'vue'
 import { useHead } from '@unhead/vue'
+import { useTranslations } from '../composables/useTranslations'
+import { usePortfolio } from '../composables/usePortfolio'
+import { useSolsticeMotion } from '../composables/useMotion'
 
-useHead({
-  title: 'Privacy Policy',
-  meta: [
-    { name: 'description', content: 'Privacy Policy - Learn how we collect, use, and protect your personal information.' }
-  ]
-})
+const { t } = useTranslations()
+const { data } = usePortfolio()
+const root = ref(null)
+const email = computed(() => data.value?.profile?.email || 'hi@shahzaman.dev')
+
+useSolsticeMotion(root)
+useHead({ title: 'Privacy Policy — Shahzaman', meta: [{ name: 'robots', content: 'noindex' }] })
 </script>
+
+<template>
+  <main ref="root">
+    <header class="wrap page-head">
+      <div class="eyebrow" style="margin-bottom: 20px">{{ t('footer.legal', 'Legal') }}</div>
+      <h1>{{ t('privacy.heading_a', 'Privacy') }} <span class="grad-text">{{ t('privacy.heading_b', 'Policy.') }}</span></h1>
+    </header>
+
+    <section class="wrap section" style="padding-top: 0">
+      <div class="article">
+        <div class="prose reveal">
+          <p>{{ t('privacy.intro', 'This site is a personal portfolio. It collects only the information you choose to share through the contact form, and it does not sell or share your data with third parties.') }}</p>
+          <h2>What is collected</h2>
+          <p>When you submit the contact form, your name, email address and message are stored so that I can reply. Basic, anonymous analytics may be used to understand which pages are visited.</p>
+          <h2>How it is used</h2>
+          <ul>
+            <li>To respond to your enquiry.</li>
+            <li>To improve the content and performance of this site.</li>
+          </ul>
+          <h2>Your choices</h2>
+          <p>You can request that any message you sent be deleted at any time. Contact <a :href="`mailto:${email}`">{{ email }}</a> and it will be removed.</p>
+          <h2>Cookies</h2>
+          <p>Only essential cookies are used. No advertising or cross-site tracking cookies are set.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</template>

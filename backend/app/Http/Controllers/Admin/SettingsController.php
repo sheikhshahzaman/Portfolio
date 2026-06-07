@@ -35,6 +35,22 @@ class SettingsController extends Controller
 
             // Social Links
             'social_links' => json_decode(Setting::get('social_links', '{}'), true),
+
+            // Theme / Appearance
+            'theme_palette' => Setting::get('theme_palette', 'Sunset'),
+            'theme_amber' => Setting::get('theme_amber', ''),
+            'theme_orange' => Setting::get('theme_orange', ''),
+            'theme_coral' => Setting::get('theme_coral', ''),
+            'theme_violet' => Setting::get('theme_violet', ''),
+            'theme_accent' => Setting::get('theme_accent', ''),
+            'theme_accent_deep' => Setting::get('theme_accent_deep', ''),
+            'theme_ink' => Setting::get('theme_ink', ''),
+            'theme_bg' => Setting::get('theme_bg', ''),
+            'theme_card' => Setting::get('theme_card', ''),
+            'logo_color' => Setting::get('logo_color', ''),
+
+            // About
+            'about_principles' => json_decode(Setting::get('about_principles', '[]'), true) ?: [],
         ];
 
         return Inertia::render('Admin/Settings/Index', [
@@ -68,13 +84,38 @@ class SettingsController extends Controller
 
             // Social Links
             'social_links' => 'nullable|array',
+
+            // Theme / Appearance
+            'theme_palette' => 'nullable|string|max:50',
+            'theme_amber' => 'nullable|string|max:32',
+            'theme_orange' => 'nullable|string|max:32',
+            'theme_coral' => 'nullable|string|max:32',
+            'theme_violet' => 'nullable|string|max:32',
+            'theme_accent' => 'nullable|string|max:32',
+            'theme_accent_deep' => 'nullable|string|max:32',
+            'theme_ink' => 'nullable|string|max:32',
+            'theme_bg' => 'nullable|string|max:32',
+            'theme_card' => 'nullable|string|max:32',
+            'logo_color' => 'nullable|string|max:32',
+
+            // About
+            'about_principles' => 'nullable|array',
+            'about_principles.*.title' => 'nullable|string|max:120',
+            'about_principles.*.text' => 'nullable|string|max:600',
         ]);
+
+        $themeKeys = ['theme_palette', 'theme_amber', 'theme_orange', 'theme_coral', 'theme_violet', 'theme_accent', 'theme_accent_deep', 'theme_ink', 'theme_bg', 'theme_card', 'logo_color'];
+        $seoKeys = ['meta_title', 'meta_description', 'meta_keywords', 'og_title', 'og_description', 'og_image', 'twitter_card', 'twitter_handle', 'canonical_url', 'robots'];
 
         // Save each setting
         foreach ($validated as $key => $value) {
             if ($key === 'social_links') {
                 Setting::set($key, json_encode($value), 'json', 'social');
-            } elseif (in_array($key, ['meta_title', 'meta_description', 'meta_keywords', 'og_title', 'og_description', 'og_image', 'twitter_card', 'twitter_handle', 'canonical_url', 'robots'])) {
+            } elseif ($key === 'about_principles') {
+                Setting::set($key, json_encode($value ?? []), 'json', 'general');
+            } elseif (in_array($key, $themeKeys)) {
+                Setting::set($key, $value, 'text', 'theme');
+            } elseif (in_array($key, $seoKeys)) {
                 Setting::set($key, $value, 'text', 'seo');
             } else {
                 Setting::set($key, $value, 'text', 'general');

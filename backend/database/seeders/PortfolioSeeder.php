@@ -195,6 +195,19 @@ class PortfolioSeeder extends Seeder
             'order' => 1
         ]);
 
+        // Theme / Appearance defaults
+        Setting::set('theme_palette', 'Sunset', 'text', 'theme');
+        Setting::set('theme_accent', '#ff6a3d', 'text', 'theme');
+        Setting::set('theme_accent_deep', '#e8421f', 'text', 'theme');
+        Setting::set('logo_color', '', 'text', 'theme');
+
+        // About — Principles
+        Setting::set('about_principles', json_encode([
+            ['title' => 'Architecture first', 'text' => 'I map the boundaries before the code. A clean contract at the edge buys years of freedom underneath it.'],
+            ['title' => 'Built for load', 'text' => 'Throughput is a design decision, not a patch. I plan for the traffic that does not ask permission.'],
+            ['title' => 'Legible by default', 'text' => 'Good systems read like prose. I lead teams toward code the next engineer can hold in their head.'],
+        ]), 'json', 'general');
+
         $this->command->info('Portfolio data seeded successfully!');
     }
 }

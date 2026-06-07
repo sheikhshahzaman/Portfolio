@@ -1,73 +1,59 @@
-<template>
-  <section id="skills" class="py-20 px-4 bg-white dark:bg-gray-900">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="scroll-animate text-4xl font-bold text-center mb-4 gradient-text">
-        {{ t('skills.title', 'Skills & Expertise') }}
-      </h2>
-      <p class="scroll-animate text-center text-gray-600 dark:text-gray-400 mb-12 text-lg max-w-2xl mx-auto" style="animation-delay: 0.1s">
-        {{ t('skills.subtitle', 'Technologies and tools I work with') }}
-      </p>
+<script setup>
+import { ref, computed } from 'vue'
+import { useTranslations } from '../composables/useTranslations'
+import { useSolsticeMotion } from '../composables/useMotion'
 
-      <div class="space-y-12">
-        <div v-for="(categorySkills, category, catIndex) in skills" :key="category"
-             class="scroll-animate"
-             :style="{ animationDelay: (catIndex * 0.2 + 0.2) + 's' }">
-          <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
-            <div class="w-1 h-8 bg-gradient-to-b from-blue-600 to-purple-600 rounded-full"></div>
-            {{ category }}
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div v-for="(skill, index) in categorySkills" :key="skill.id"
-                 class="group space-y-2 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 hover:scale-105 hover:shadow-lg border-2 border-transparent hover:border-blue-500">
-              <div class="flex justify-between items-center">
-                <span class="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-2">
-                  <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
-                  {{ skill.name }}
-                </span>
-                <span class="text-sm font-bold px-2 py-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full">{{ skill.proficiency }}%</span>
-              </div>
-              <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-                <div
-                  class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 h-3 rounded-full transition-all duration-1000 ease-out relative overflow-hidden"
-                  :style="{ width: skill.proficiency + '%' }"
-                >
-                  <div class="absolute inset-0 bg-white opacity-20 animate-shimmer"></div>
-                </div>
-              </div>
-            </div>
+const props = defineProps({ skills: { type: [Object, Array], default: () => ({}) } })
+const { t } = useTranslations()
+const root = ref(null)
+
+// API returns skills grouped by category: { Backend: [...], Frontend: [...] }
+const categories = computed(() => {
+  const s = props.skills
+  if (!s) return []
+  if (Array.isArray(s)) {
+    const grouped = {}
+    s.forEach((sk) => { (grouped[sk.category] ||= []).push(sk) })
+    return Object.entries(grouped).map(([name, list]) => ({ name, list }))
+  }
+  return Object.entries(s).map(([name, list]) => ({ name, list }))
+})
+
+useSolsticeMotion(root, ({ gsap, inView }) => {
+  root.value.querySelectorAll('.skillcat').forEach((c) => {
+    const h = c.querySelector('.skillcat__h')
+    const skills = c.querySelectorAll('.skill')
+    const fills = c.querySelectorAll('.skill__fill')
+    if (h) gsap.set(h, { x: -40, autoAlpha: 0 })
+    if (skills.length) gsap.set(skills, { x: 30, autoAlpha: 0 })
+    if (fills.length) gsap.set(fills, { scaleX: 0, transformOrigin: 'left center' })
+    inView(c, () => {
+      if (h) gsap.to(h, { x: 0, autoAlpha: 1, duration: 0.7, ease: 'power3.out' })
+      if (skills.length) gsap.to(skills, { x: 0, autoAlpha: 1, stagger: 0.07, duration: 0.6, ease: 'power2.out' })
+      if (fills.length) gsap.to(fills, { scaleX: 1, duration: 1.2, stagger: 0.08, ease: 'power2.out', delay: 0.1 })
+    })
+  })
+})
+</script>
+
+<template>
+  <section class="wrap section" id="skills" ref="root" v-if="categories.length">
+    <div class="section-intro reveal">
+      <div class="eyebrow center">{{ t('skills.eyebrow', 'Skills') }}</div>
+      <h2>{{ t('skills.heading_a', 'Technologies I') }} <span class="grad-text">{{ t('skills.heading_b', 'work with.') }}</span></h2>
+      <p>{{ t('skills.subtitle', 'The tools I reach for, and how deep I go.') }}</p>
+    </div>
+
+    <div class="skillcats">
+      <div class="skillcat" v-for="cat in categories" :key="cat.name">
+        <div class="skillcat__h">{{ cat.name }}</div>
+        <div class="skillgrid">
+          <div class="skill" v-for="sk in cat.list" :key="sk.id || sk.name">
+            <div class="skill__top"><span>{{ sk.name }}</span><span class="skill__pct">{{ sk.proficiency }}%</span></div>
+            <div class="skill__bar"><div class="skill__fill" :style="{ '--pct': sk.proficiency + '%' }"></div></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 </template>
-
-<script setup>
-import { useTranslations } from '../composables/useTranslations'
-import { useScrollAnimation } from '../composables/useScrollAnimation'
-
-const { t } = useTranslations()
-useScrollAnimation()
-
-defineProps({
-  skills: {
-    type: Object,
-    default: () => ({})
-  }
-})
-</script>
-
-<style scoped>
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.animate-shimmer {
-  animation: shimmer 2s infinite;
-}
-</style>

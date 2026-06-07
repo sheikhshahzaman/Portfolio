@@ -17,6 +17,9 @@ Route::prefix('portfolio')->group(function () {
     Route::get('/blog/{slug}', [PortfolioController::class, 'blogPost']);
 });
 
+// Theme Route
+Route::get('/theme', [PortfolioController::class, 'theme']);
+
 // Languages Route
 Route::get('/languages', [PortfolioController::class, 'languages']);
 

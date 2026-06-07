@@ -62,6 +62,11 @@ export const portfolioAPI = {
   // Translations
   getTranslations(lang = 'en') {
     return api.get(`/translations?lang=${lang}`)
+  },
+
+  // Theme / palette (admin-controlled)
+  getTheme() {
+    return api.get('/theme')
   }
 }
 

@@ -1,135 +1,118 @@
-<template>
-  <section class="relative flex items-center justify-center min-h-screen pt-48 pb-32 -mt-16 overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
-    <!-- Animated gradient overlay -->
-    <div class="absolute inset-0 opacity-50">
-      <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 animate-pulse"></div>
-    </div>
-
-    <!-- Content -->
-    <div class="relative z-10 max-w-5xl px-4 mx-auto text-center">
-      <!-- Greeting -->
-      <p class="mb-4 text-xl text-blue-400 animate-fade-in">
-        {{ t('hero.greeting', 'Hi, my name is') }}
-      </p>
-
-      <!-- Name -->
-      <h1 class="mb-4 text-5xl font-bold text-white md:text-7xl animate-slide-up">
-        {{ profile?.name || 'Shahzaman' }}
-      </h1>
-
-      <!-- Title -->
-      <h2 class="mb-6 text-3xl font-bold text-gray-300 md:text-5xl animate-slide-up" style="animation-delay: 0.2s">
-        {{ profile?.title || 'Full-Stack Developer' }}
-      </h2>
-
-      <!-- Bio -->
-      <p class="max-w-3xl mx-auto mb-8 text-lg text-gray-400 md:text-xl animate-slide-up whitespace-pre-line min-h-[120px] text-left" style="animation-delay: 0.4s">
-        {{ profile?.bio || 'I build exceptional digital experiences that make a difference.' }}
-      </p>
-
-      <!-- CTA Buttons -->
-      <div class="flex flex-col items-center justify-center gap-4 sm:flex-row animate-slide-up" style="animation-delay: 0.6s">
-        <a
-          href="#projects"
-          class="px-8 py-3 text-white transition-all transform bg-blue-600 rounded-full shadow-lg hover:bg-blue-700 hover:scale-105 hover:shadow-blue-500/50"
-        >
-          {{ t('hero.view_work', 'View My Work') }}
-        </a>
-        <a
-          href="/resume.pdf"
-          download="Shahzaman_Resume.pdf"
-          class="flex items-center gap-2 px-8 py-3 text-blue-400 transition-all transform border-2 border-blue-600 rounded-full shadow-lg hover:bg-blue-600 hover:text-white hover:scale-105"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          {{ t('hero.download_resume', 'Download Resume') }}
-        </a>
-        <a
-          href="#contact"
-          class="px-8 py-3 text-white transition-all transform border-2 border-white rounded-full hover:bg-white hover:text-blue-900 hover:scale-105"
-        >
-          {{ t('hero.get_in_touch', 'Get In Touch') }}
-        </a>
-      </div>
-
-      <!-- Social Links -->
-      <div class="flex justify-center gap-6 mt-12 animate-fade-in" style="animation-delay: 0.8s">
-        <!-- GitHub -->
-        <a
-          v-if="profile?.social_links?.github"
-          :href="profile.social_links.github"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-gray-400 transition-colors transform hover:text-blue-400 hover:scale-110"
-          title="GitHub"
-        >
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
-        </a>
-
-        <!-- LinkedIn -->
-        <a
-          v-if="profile?.social_links?.linkedin"
-          :href="profile.social_links.linkedin"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-gray-400 transition-colors transform hover:text-blue-400 hover:scale-110"
-          title="LinkedIn"
-        >
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-          </svg>
-        </a>
-
-        <!-- Twitter/X (if available) -->
-        <a
-          v-if="profile?.social_links?.twitter"
-          :href="profile.social_links.twitter"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-gray-400 transition-colors transform hover:text-blue-400 hover:scale-110"
-          title="Twitter"
-        >
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-          </svg>
-        </a>
-      </div>
-
-      <!-- Scroll indicator -->
-      <div class="absolute transform -translate-x-1/2 bottom-10 left-1/2 animate-bounce">
-        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-        </svg>
-      </div>
-    </div>
-  </section>
-</template>
-
 <script setup>
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
 import { useTranslations } from '../composables/useTranslations'
+import { useSolsticeMotion, reduceMotion } from '../composables/useMotion'
 
+const props = defineProps({ profile: { type: Object, default: () => ({}) } })
 const { t } = useTranslations()
+const router = useRouter()
 
-defineProps({
-  profile: {
-    type: Object,
-    default: () => ({})
+const root = ref(null)
+const codeEl = ref(null)
+let typingTimer = null
+
+const SOCIAL_LABELS = {
+  github: 'GH', linkedin: 'IN', twitter: 'X', x: 'X', devto: 'DEV',
+  'dev.to': 'DEV', instagram: 'IG', facebook: 'FB', youtube: 'YT',
+}
+const socials = computed(() =>
+  Object.entries(props.profile.social_links || {})
+    .filter(([, url]) => url)
+    .map(([key, url]) => ({ key, url, label: SOCIAL_LABELS[key.toLowerCase()] || key.slice(0, 2).toUpperCase() }))
+)
+
+const CODE_LINES = [
+  { c: 'c', t: '// systems that scale to 1M+ users' },
+  { c: 'k', t: 'class Gateway extends BFF {' },
+  { c: 'f', t: '  async route(req) {' },
+  { c: 'n', t: '    const user = await auth.verify(req);' },
+  { c: 'k', t: '    return kafka.publish("orders", {' },
+  { c: 'n', t: '      tenant: user.tenant,' },
+  { c: 'n', t: '      payload: req.body,' },
+  { c: 'k', t: '    });' },
+  { c: 'f', t: '  }' },
+  { c: 'k', t: '}' },
+  { c: 'c', t: '// shipped · resilient · multi-tenant' },
+]
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+function startTyping() {
+  const el = codeEl.value
+  if (!el) return
+  if (reduceMotion) {
+    el.innerHTML = CODE_LINES.map((l) => `<div class="ln ${l.c}">${escapeHtml(l.t)}</div>`).join('')
+    return
   }
+  let li = 0, ci = 0
+  const render = (upto, partial) => {
+    let html = ''
+    for (let i = 0; i < upto; i++) html += `<div class="ln ${CODE_LINES[i].c}">${escapeHtml(CODE_LINES[i].t)}</div>`
+    const cls = CODE_LINES[upto] ? CODE_LINES[upto].c : 'k'
+    html += `<div class="ln ${cls}">${escapeHtml(partial || '')}<span class="caret"></span></div>`
+    el.innerHTML = html
+  }
+  const tick = () => {
+    if (li >= CODE_LINES.length) {
+      typingTimer = setTimeout(() => { li = 0; ci = 0; tick() }, 2600)
+      return
+    }
+    const txt = CODE_LINES[li].t
+    if (ci <= txt.length) { render(li, txt.slice(0, ci)); ci++; typingTimer = setTimeout(tick, 22 + Math.random() * 30) }
+    else { li++; ci = 0; typingTimer = setTimeout(tick, 130) }
+  }
+  tick()
+}
+
+useSolsticeMotion(root, ({ gsap }) => {
+  gsap.from(root.value.querySelectorAll('.hero__copy > *'), {
+    y: 30, autoAlpha: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out', delay: 0.1,
+  })
+  gsap.from(root.value.querySelector('.laptop'), {
+    y: 40, autoAlpha: 0, scale: 0.96, duration: 1, ease: 'power3.out', delay: 0.25,
+  })
 })
+
+onMounted(startTyping)
+onBeforeUnmount(() => typingTimer && clearTimeout(typingTimer))
+
+const view = () => router.push('/projects')
+const contact = () => router.push('/contact')
 </script>
 
-<style scoped>
-@keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+<template>
+  <header class="wrap hero" ref="root">
+    <div class="hero__copy">
+      <div class="hero__hello">{{ t('hero.greeting', 'Hi, my name is') }}</div>
+      <h1 class="display"><span class="grad-text">{{ profile.name || 'Shahzaman' }}</span></h1>
+      <p class="hero__title" v-if="profile.title">{{ profile.title }}</p>
+      <p class="hero__lede">
+        {{ t('hero.lede', 'Five years building backends and the full stack around them. I architect systems that stay calm under real traffic. 1M+ users shipped.') }}
+      </p>
+      <div class="hero__cta">
+        <button class="btn btn--solid mag" data-mag="0.3" @click="view">
+          {{ t('hero.view_work', 'View my work') }} <span class="arr">→</span>
+        </button>
+        <button class="btn mag" data-mag="0.3" @click="contact">
+          {{ t('hero.get_in_touch', 'Get in touch') }}
+        </button>
+      </div>
+      <div class="hero__social" v-if="socials.length">
+        <a v-for="s in socials" :key="s.key" :href="s.url" target="_blank" rel="noopener" :title="s.key">{{ s.label }}</a>
+      </div>
+    </div>
 
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient 15s ease infinite;
-}
-</style>
+    <div class="hero__visual" data-par="-30">
+      <div class="laptop" aria-hidden="true">
+        <div class="laptop__screen">
+          <div class="laptop__bar"><i></i><i></i><i></i><span class="file">~/shahzaman/gateway.ts</span></div>
+          <div class="code" ref="codeEl"></div>
+        </div>
+        <div class="laptop__base"></div>
+        <div class="laptop__hinge"></div>
+      </div>
+    </div>
+  </header>
+</template>
