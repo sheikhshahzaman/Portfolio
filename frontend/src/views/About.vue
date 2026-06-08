@@ -17,7 +17,7 @@ const DEFAULT_BIO =
   'I am a software engineer who leads with architecture. I have spent five years on backends and the full stack around them.\n\nThe thread through all of it is the same. Decide how the pieces fit before writing the first line. Keep the data honest. Let the system carry the load so the team does not have to.'
 
 const paragraphs = computed(() => {
-  const text = t('about.body', profile.value.bio || DEFAULT_BIO)
+  const text = profile.value.bio || t('about.body', DEFAULT_BIO)
   return text.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean)
 })
 

@@ -89,7 +89,7 @@ const contact = () => router.push('/contact')
       <h1 class="display"><span class="grad-text">{{ profile.name || 'Shahzaman' }}</span></h1>
       <p class="hero__title" v-if="profile.title">{{ profile.title }}</p>
       <p class="hero__lede">
-        {{ t('hero.lede', 'Five years building backends and the full stack around them. I architect systems that stay calm under real traffic. 1M+ users shipped.') }}
+        {{ profile.bio || t('hero.lede', 'Five years building backends and the full stack around them. I architect systems that stay calm under real traffic. 1M+ users shipped.') }}
       </p>
       <div class="hero__cta">
         <button class="btn btn--solid mag" data-mag="0.3" @click="view">

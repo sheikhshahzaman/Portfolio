@@ -35,7 +35,7 @@ const goHome = () => (router.currentRoute.value.path === '/' ? scrollToTop(false
       <div>
         <h4><span class="blip"></span>{{ profile.name || 'Shahzaman' }}</h4>
         <p class="desc">
-          {{ t('footer.description', profile.bio ||
+          {{ profile.bio || t('footer.description',
             'Software engineer building scalable backend systems. PHP, Laravel, Rust, Kafka and Vue.js. AI integration, system design and team leadership.') }}
         </p>
         <p class="contactline" v-if="profile.email || profile.phone">
