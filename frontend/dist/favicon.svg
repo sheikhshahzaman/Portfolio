@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="sun" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffc24b"/>
+      <stop offset="0.42" stop-color="#ff7a3d"/>
+      <stop offset="0.78" stop-color="#ff5360"/>
+      <stop offset="1" stop-color="#b65cff"/>
+    </linearGradient>
+  </defs>
+  <rect x="3" y="3" width="94" height="94" rx="24" fill="url(#sun)"/>
+  <text x="50" y="72" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-weight="800" font-size="64" fill="#fff8f2">S</text>
+</svg>

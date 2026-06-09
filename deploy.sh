@@ -1,104 +1,80 @@
 #!/bin/bash
 
-# Portfolio Deployment Script
-# This script prepares your application for production deployment
+# ============================================================
+# Portfolio — LOCAL build & package script
+# Run this on your machine. It builds the public site + the
+# admin panel, bundles everything into backend/, and zips a
+# ready-to-upload archive (portfolio-production.zip).
+# Then upload + extract on the server and run deploy-server.sh.
+# ============================================================
 
-set -e  # Exit on error
+set -e  # exit on error
 
-echo "🚀 Starting deployment preparation..."
+GREEN='\033[0;32m'; BLUE='\033[0;34m'; RED='\033[0;31m'; YELLOW='\033[1;33m'; NC='\033[0m'
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+cd "$ROOT"
 
-# Colors
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-RED='\033[0;31m'
-NC='\033[0m' # No Color
+echo -e "${BLUE}🚀 Building portfolio for production...${NC}"
 
-# Step 1: Build Frontend
-echo -e "${BLUE}Step 1: Building frontend...${NC}"
-cd frontend
+# ----- Step 1: Build the public site (Vue + Vite) -----
+echo -e "${BLUE}Step 1/6: Building public site (frontend)...${NC}"
+cd "$ROOT/frontend"
+npm install                 # installs lenis + other deps
+npm run build               # -> frontend/dist
+echo -e "${GREEN}✓ Public site built${NC}"
+
+# ----- Step 2: Build the admin panel (Inertia + Vite) -----
+echo -e "${BLUE}Step 2/6: Building admin panel (backend assets)...${NC}"
+cd "$ROOT/backend"
 npm install
-npm run build
+npm run build               # -> backend/public/build  (gitignored, so build it here)
+echo -e "${GREEN}✓ Admin panel built${NC}"
 
-if [ $? -eq 0 ]; then
-    echo -e "${GREEN}✓ Frontend built successfully${NC}"
-else
-    echo -e "${RED}✗ Frontend build failed${NC}"
-    exit 1
-fi
-
-# Step 2: Copy frontend build to backend public
-echo -e "${BLUE}Step 2: Copying frontend to backend...${NC}"
-cd ..
+# ----- Step 3: Copy public-site build into backend/public -----
+echo -e "${BLUE}Step 3/6: Copying public site into backend/public...${NC}"
+cd "$ROOT"
 rm -rf backend/public/assets
-rm -f backend/public/index.html
-cp -r frontend/dist/* backend/public/
+rm -f  backend/public/index.html
+cp -r frontend/dist/* backend/public/     # index.html, assets/, favicons, resume.pdf, manifest
+echo -e "${GREEN}✓ Public site copied (admin assets in public/build are untouched)${NC}"
 
-if [ $? -eq 0 ]; then
-    echo -e "${GREEN}✓ Frontend copied to backend/public${NC}"
-else
-    echo -e "${RED}✗ Failed to copy frontend${NC}"
-    exit 1
-fi
-
-# Step 3: Install production dependencies
-echo -e "${BLUE}Step 3: Installing production dependencies...${NC}"
-cd backend
+# ----- Step 4: Install PHP dependencies (production) -----
+echo -e "${BLUE}Step 4/6: Installing PHP dependencies...${NC}"
+cd "$ROOT/backend"
 composer install --optimize-autoloader --no-dev
+echo -e "${GREEN}✓ Composer dependencies installed${NC}"
 
-if [ $? -eq 0 ]; then
-    echo -e "${GREEN}✓ Dependencies installed${NC}"
-else
-    echo -e "${RED}✗ Failed to install dependencies${NC}"
-    exit 1
-fi
-
-# Step 4: Clear caches
-echo -e "${BLUE}Step 4: Clearing caches...${NC}"
-php artisan config:clear
-php artisan cache:clear
-php artisan route:clear
-php artisan view:clear
-
-echo -e "${GREEN}✓ Caches cleared${NC}"
-
-# Step 5: Optimize for production
-echo -e "${BLUE}Step 5: Optimizing for production...${NC}"
+# ----- Step 5: Refresh + cache config (also silences the PHP 8.5 PDO
+#               deprecation that can corrupt API JSON) -----
+echo -e "${BLUE}Step 5/6: Caching config/routes/views...${NC}"
+php artisan optimize:clear
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-php artisan optimize
+echo -e "${GREEN}✓ Caches built${NC}"
 
-echo -e "${GREEN}✓ Application optimized${NC}"
-
-# Step 6: Create deployment archive
-echo -e "${BLUE}Step 6: Creating deployment archive...${NC}"
-cd ..
+# ----- Step 6: Create the upload archive -----
+echo -e "${BLUE}Step 6/6: Creating deployment archive...${NC}"
+cd "$ROOT"
+rm -f portfolio-production.zip
 zip -r portfolio-production.zip backend \
     -x "backend/node_modules/*" \
     -x "backend/.git/*" \
     -x "backend/storage/logs/*" \
     -x "backend/database/database.sqlite" \
     -x "backend/.env"
-
-if [ $? -eq 0 ]; then
-    echo -e "${GREEN}✓ Deployment archive created: portfolio-production.zip${NC}"
-else
-    echo -e "${RED}✗ Failed to create archive${NC}"
-    exit 1
-fi
+echo -e "${GREEN}✓ Archive created: portfolio-production.zip${NC}"
 
 echo ""
 echo -e "${GREEN}========================================${NC}"
-echo -e "${GREEN}✓ Deployment preparation complete!${NC}"
+echo -e "${GREEN}✓ Build complete${NC}"
 echo -e "${GREEN}========================================${NC}"
 echo ""
-echo "Next steps:"
-echo "1. Upload 'portfolio-production.zip' to your Hostinger hosting"
-echo "2. Extract the archive"
-echo "3. Copy .env.production to .env and configure it"
-echo "4. Run: php artisan key:generate"
-echo "5. Run: php artisan migrate --force"
-echo "6. Run: php artisan storage:link"
-echo "7. Set document root to 'public' folder"
+echo "Next steps on the server:"
+echo "  1. Upload & extract portfolio-production.zip"
+echo "  2. cp .env.production .env   (first deploy only) and configure it"
+echo "  3. Run: bash deploy-server.sh"
+echo "  4. Point the web server document root at backend/public"
 echo ""
-echo "For detailed instructions, see DEPLOYMENT_GUIDE.md"
+echo -e "${YELLOW}NOTE: never run 'php artisan db:seed' on production — the"
+echo -e "PortfolioSeeder creates demo rows and would duplicate your content.${NC}"
