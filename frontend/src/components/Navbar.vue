@@ -18,7 +18,7 @@ const router = useRouter()
 const route = useRoute()
 
 const brand = computed(() => data.value?.profile?.name || 'Shahzaman')
-const resumeUrl = computed(() => data.value?.profile?.resume_url || '')
+const resumeUrl = computed(() => data.value?.profile?.resume_url || '/resume.pdf')
 
 const hidden = ref(false)
 const menuOpen = ref(false)
@@ -71,7 +71,7 @@ onBeforeUnmount(() => {
       <a @click="goAnchor('#skills')">{{ t('nav.skills', 'Skills') }}</a>
       <a @click="go('/services')" :class="{ on: route.path === '/services' }">{{ t('nav.services', 'Services') }}</a>
       <a @click="go('/blog')" :class="{ on: route.path.startsWith('/blog') }">{{ t('nav.blog', 'Blog') }}</a>
-      <a v-if="resumeUrl" class="ghost" :href="resumeUrl" target="_blank" rel="noopener">{{ t('nav.resume', 'Resume') }}</a>
+      <a v-if="resumeUrl" class="ghost" :href="resumeUrl" target="_blank" rel="noopener" download>{{ t('nav.resume', 'Resume') }}</a>
       <a class="cta mag" data-mag="0.25" @click="go('/contact')">{{ t('nav.lets_talk', "Let's talk") }}</a>
       <LanguageSwitcher
         :languages="languages"
@@ -94,7 +94,7 @@ onBeforeUnmount(() => {
     <a @click="goAnchor('#skills')">{{ t('nav.skills', 'Skills') }}</a>
     <a @click="go('/services')">{{ t('nav.services', 'Services') }}</a>
     <a @click="go('/blog')">{{ t('nav.blog', 'Blog') }}</a>
-    <a v-if="resumeUrl" :href="resumeUrl" target="_blank" rel="noopener">{{ t('nav.resume', 'Resume') }}</a>
+    <a v-if="resumeUrl" :href="resumeUrl" target="_blank" rel="noopener" download>{{ t('nav.resume', 'Resume') }}</a>
     <a class="cta" @click="go('/contact')">{{ t('nav.lets_talk', "Let's talk") }} →</a>
     <div style="margin-top: 22px">
       <LanguageSwitcher

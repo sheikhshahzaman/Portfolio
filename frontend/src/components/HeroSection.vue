@@ -78,6 +78,7 @@ useSolsticeMotion(root, ({ gsap }) => {
 onMounted(startTyping)
 onBeforeUnmount(() => typingTimer && clearTimeout(typingTimer))
 
+const resumeUrl = computed(() => props.profile.resume_url || '/resume.pdf')
 const view = () => router.push('/projects')
 const contact = () => router.push('/contact')
 </script>
@@ -95,6 +96,9 @@ const contact = () => router.push('/contact')
         <button class="btn btn--solid mag" data-mag="0.3" @click="view">
           {{ t('hero.view_work', 'View my work') }} <span class="arr">→</span>
         </button>
+        <a class="btn mag" data-mag="0.3" :href="resumeUrl" target="_blank" rel="noopener" download>
+          {{ t('hero.download_resume', 'Download Resume') }} <span class="arr">↓</span>
+        </a>
         <button class="btn mag" data-mag="0.3" @click="contact">
           {{ t('hero.get_in_touch', 'Get in touch') }}
         </button>
